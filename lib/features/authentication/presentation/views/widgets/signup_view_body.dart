@@ -115,14 +115,14 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                     const SizedBox(height: 28),
                     Center(
                       child: Text(
-                        'Join the Ecosystem',
+                        'Join the Community',
                         style: AppTextStyles.loginTitle,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
-                        'Create your Nexus account.',
+                        'Create your ConnectHub account.',
                         style: AppTextStyles.loginSubtitle,
                         textAlign: TextAlign.center,
                       ),
