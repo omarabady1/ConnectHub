@@ -43,4 +43,17 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w600,
     height: 1.3,
   );
+
+  static final splashHeading = GoogleFonts.inter(
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    height: 1.18,
+  );
+
+  static final splashSlogan = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    height: 1.6,
+    color: const Color(0xFF6B7280),
+  );
 }
