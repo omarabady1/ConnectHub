@@ -76,21 +76,47 @@ class FirebaseAuthService {
     }
   }
 
+  static const String _googleSignInServerClientId =
+      "279659541756-7nlvqj7nj6ku5bfvs1k9039ivesb4ucu.apps.googleusercontent.com";
+
+  bool _isGoogleSignInInitialized = false;
+
+  Future<void> _initializeGoogleSignIn() async {
+    if (_isGoogleSignInInitialized) return;
+
+    await GoogleSignIn.instance.initialize(
+      serverClientId: _googleSignInServerClientId,
+    );
+    _isGoogleSignInInitialized = true;
+  }
+
   Future<User> signInWithGoogle() async {
     try {
+      await _initializeGoogleSignIn();
       await GoogleSignIn.instance.signOut();
     } catch (_) {}
 
-    await GoogleSignIn.instance.initialize();
-
-    final GoogleSignInAccount googleUser = await GoogleSignIn.instance
-        .authenticate();
+    late final GoogleSignInAccount googleUser;
+    try {
+      googleUser = await GoogleSignIn.instance.authenticate();
+    } on Exception catch (e) {
+      if (e is GoogleSignInException &&
+          e.code == GoogleSignInExceptionCode.clientConfigurationError) {
+        throw CustomException(
+          'Google sign-in is not configured correctly for Android. '
+          'Please add an OAuth client ID to android/app/google-services.json or call GoogleSignIn.instance.initialize(serverClientId: "<YOUR_SERVER_CLIENT_ID>").',
+        );
+      }
+      rethrow;
+    }
 
     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+    final String? idToken = googleAuth.idToken;
+    if (idToken == null) {
+      throw CustomException('Google sign-in failed to return an ID token.');
+    }
 
-    final credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-    );
+    final credential = GoogleAuthProvider.credential(idToken: idToken);
 
     return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
   }

@@ -1,10 +1,17 @@
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/helper_functions.dart/on_generate_routes.dart';
+import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
+import 'package:connect_hub/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'features/splash/splash_view.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Prefs.init();
+  setupServiceLocator();
   runApp(const MyApp());
 }
 

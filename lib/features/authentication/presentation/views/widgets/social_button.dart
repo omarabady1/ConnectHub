@@ -15,7 +15,7 @@ class SocialButton extends StatelessWidget {
   final Widget icon;
   final Color backgroundColor;
   final Color textColor;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

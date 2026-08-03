@@ -70,7 +70,15 @@ class AuthRepoImplementation implements AuthRepo {
         emailAddress: email,
         password: password,
       );
-      var userEntity = await getUserData(userID: user.uid);
+
+      UserEntity userEntity;
+      try {
+        userEntity = await getUserData(userID: user.uid);
+      } on CustomException {
+        userEntity = UserModel.fromFirebaseUser(user);
+        await addUser(user: userEntity);
+      }
+
       await saveUserData(user: userEntity);
       return right(userEntity);
     } on CustomException catch (e) {
@@ -129,6 +137,12 @@ class AuthRepoImplementation implements AuthRepo {
       path: BackendEndpoints.getUserData,
       docId: userID,
     );
+    if (userData == null) {
+      throw CustomException('User data not found.');
+    }
+    if (userData is! Map<String, dynamic>) {
+      throw CustomException('Invalid user data format.');
+    }
     return UserModel.fromJson(userData);
   }
 }
