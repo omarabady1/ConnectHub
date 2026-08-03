@@ -3,17 +3,18 @@ import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class AuthTextField extends StatelessWidget {
-  const AuthTextField({
+   const AuthTextField({
     super.key,
     required this.hintText,
     required this.icon,
     this.obscureText = false,
+    this.inputType = TextInputType.text,
   });
 
   final String hintText;
   final IconData icon;
   final bool obscureText;
-
+  final TextInputType inputType;
   @override
   Widget build(BuildContext context) {
     return TextField(
