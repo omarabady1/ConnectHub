@@ -27,13 +27,17 @@ class FirebaseAuthService {
       } else if (e.code == 'network-request-failed') {
         throw CustomException('please check your internet connection');
       } else {
-        throw CustomException('an unexpected error occurred, please try again later');
+        throw CustomException(
+          'an unexpected error occurred, please try again later',
+        );
       }
     } catch (e) {
       log(
         'Exception in FirebaseAuthService.createUserWithEmailAndPassword: $e',
       );
-      throw CustomException('an unexpected error occurred, please try again later');
+      throw CustomException(
+        'an unexpected error occurred, please try again later',
+      );
     }
   }
 
@@ -58,13 +62,17 @@ class FirebaseAuthService {
       } else if (e.code == 'network-request-failed') {
         throw CustomException('please check your internet connection');
       } else {
-        throw CustomException('an unexpected error occurred, please try again later');
+        throw CustomException(
+          'an unexpected error occurred, please try again later',
+        );
       }
     } catch (e) {
       log(
         'Exception in FirebaseAuthService.createUserWithEmailAndPassword: $e',
       );
-      throw CustomException('an unexpected error occurred, please try again later');
+      throw CustomException(
+        'an unexpected error occurred, please try again later',
+      );
     }
   }
 
@@ -86,8 +94,6 @@ class FirebaseAuthService {
 
     return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
   }
-
-
 
   Future deleteUser() async {
     await FirebaseAuth.instance.currentUser!.delete();
