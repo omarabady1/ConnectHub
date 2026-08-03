@@ -45,4 +45,6 @@ app.*.map.json
 /android/app/release
 
 figma_splash.png
+figma_login.png
 rules.md
+

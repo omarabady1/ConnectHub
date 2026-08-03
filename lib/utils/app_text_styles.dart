@@ -44,6 +44,54 @@ abstract class AppTextStyles {
     height: 1.3,
   );
 
+  static final loginTitle = GoogleFonts.inter(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
+    height: 1.12,
+  );
+
+  static final loginSubtitle = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+    color: const Color(0xFF6B7280),
+  );
+
+  static final inputLabel = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.8,
+    height: 1.4,
+    color: const Color(0xFF4B5563),
+  );
+
+  static final inputText = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+    color: const Color(0xFF111827),
+  );
+
+  static final loginButton = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: const Color(0xFFFFFFFF),
+  );
+
+  static final linkText = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: const Color(0xFF6366F1),
+  );
+
+  static final secondaryText = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: const Color(0xFF6B7280),
+  );
+
   static final splashHeading = GoogleFonts.inter(
     fontSize: 22,
     fontWeight: FontWeight.w700,

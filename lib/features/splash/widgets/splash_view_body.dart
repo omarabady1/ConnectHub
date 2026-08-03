@@ -1,3 +1,6 @@
+import 'package:connect_hub/core/services/firebase_auth_service.dart';
+import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
+import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
 import 'package:connect_hub/generated/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,6 +38,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
       parent: _animationController,
       curve: const Interval(0.3, 1, curve: Curves.easeIn),
     );
+
+    executeNavigation();
 
     _animationController.forward();
   }
@@ -87,5 +92,28 @@ class _SplashViewBodyState extends State<SplashViewBody>
         ),
       ),
     );
+  }
+
+  void executeNavigation() {
+    Future.delayed(const Duration(milliseconds: 2300), () async {
+      if (mounted) {
+        try {
+          bool isValidUser = await FirebaseAuthService().verifyAndCheckUser();
+          if (mounted) {
+            if (isValidUser) {
+              Navigator.pushReplacementNamed(context, LoginView.routeName);
+            } else {
+              Navigator.pushReplacementNamed(context, LoginView.routeName);
+            }
+          } else {
+            Navigator.pushReplacementNamed(context, LoginView.routeName);
+          }
+        } catch (e) {
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, LoginView.routeName);
+          }
+        }
+      }
+    });
   }
 }
