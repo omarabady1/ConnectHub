@@ -15,7 +15,7 @@ class HomeViewBody extends StatefulWidget {
 }
 
 class _HomeViewBodyState extends State<HomeViewBody> {
-  late final Future<List<PostModel>> _postsFuture;
+  late Future<List<PostModel>> _postsFuture;
 
   @override
   void initState() {
@@ -43,8 +43,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        _postsFuture = _loadPosts();
-        setState(() {});
+        final future = _loadPosts();
+        setState(() {
+          _postsFuture = future;
+        });
+        await future;
       },
       child: Container(
         color: kHomeBackgroundColor,
@@ -52,12 +55,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           future: _postsFuture,
           builder: (context, snapshot) {
             final posts = snapshot.data ?? [];
-      
+
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
-      
+
             return ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.only(
                 left: 16,
                 right: 16,
