@@ -3,9 +3,7 @@ import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class ChatbotTopAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback? onBackPressed;
-
-  const ChatbotTopAppBar({super.key, this.onBackPressed});
+  const ChatbotTopAppBar({super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(64);
@@ -29,28 +27,14 @@ class ChatbotTopAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                color: kTextDarkColor,
-                size: 24,
-              ),
-            ),
+      child: Center(
+        child: Text(
+          'ChatBot',
+          style: AppTextStyles.bold24.copyWith(
+            color: kBrandIndigo,
+            letterSpacing: -0.6,
           ),
-          Text(
-            'ChatBot',
-            style: AppTextStyles.bold24.copyWith(
-              color: kBrandIndigo,
-              letterSpacing: -0.6,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

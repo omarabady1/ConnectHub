@@ -1,10 +1,8 @@
-import 'package:connect_hub/features/chatbot/presentaion/views/chatbot_view.dart';
-import 'package:connect_hub/features/create_post/presentation/views/create_post_view.dart';
-import 'package:connect_hub/features/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../constants.dart';
 
-class HomeBottomNavBar extends StatefulWidget {
+class HomeBottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int>? onItemTapped;
 
@@ -15,48 +13,7 @@ class HomeBottomNavBar extends StatefulWidget {
   });
 
   @override
-  State<HomeBottomNavBar> createState() => _HomeBottomNavBarState();
-}
-
-class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = widget.selectedIndex;
-  }
-
-  void _onItemClick(int index) {
-    if (index == 1) {
-      Navigator.of(context).pushNamed(CreatePostView.routeName);
-      return;
-    }
-    if (index == 2) {
-      Navigator.of(context).pushNamed(ChatbotView.routeName);
-      return;
-    }
-    if (index == 3) {
-      Navigator.of(context).pushNamed(ProfileView.routeName);
-      return;
-    }
-    setState(() {
-      _currentIndex = index;
-    });
-    if (widget.onItemTapped != null) {
-      widget.onItemTapped!(index);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final navItems = [
-      Icons.home_rounded,
-      Icons.add_circle_outline_rounded,
-      Icons.auto_awesome_outlined,
-      Icons.person_outline_rounded,
-    ];
-
     return Container(
       height: 80,
       decoration: BoxDecoration(
@@ -75,10 +32,10 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(navItems.length, (index) {
-          final isSelected = _currentIndex == index;
+        children: List.generate(3, (index) {
+          final isSelected = selectedIndex == index;
           return InkWell(
-            onTap: () => _onItemClick(index),
+            onTap: () => onItemTapped?.call(index),
             borderRadius: BorderRadius.circular(22),
             child: SizedBox(
               width: 56,
@@ -86,13 +43,7 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    navItems[index],
-                    color: isSelected
-                        ? kBrandIndigo
-                        : kTextDarkColor.withValues(alpha: 0.5),
-                    size: 24,
-                  ),
+                  _buildIcon(index, isSelected),
                   const SizedBox(height: 4),
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -109,6 +60,35 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
           );
         }),
       ),
+    );
+  }
+
+  Widget _buildIcon(int index, bool isSelected) {
+    final activeColor = kBrandIndigo;
+    final inactiveColor = kTextDarkColor.withValues(alpha: 0.5);
+
+    if (index == 1) {
+      return SvgPicture.asset(
+        'assets/icons/chatbot_icon.svg',
+        width: 20,
+        height: 20,
+        colorFilter: ColorFilter.mode(
+          isSelected ? activeColor : inactiveColor,
+          BlendMode.srcIn,
+        ),
+      );
+    }
+
+    final icons = [
+      Icons.home_rounded,
+      Icons.home_rounded,
+      Icons.person_outline_rounded,
+    ];
+
+    return Icon(
+      icons[index],
+      color: isSelected ? activeColor : inactiveColor,
+      size: 24,
     );
   }
 }
