@@ -4,6 +4,7 @@ import 'package:connect_hub/features/chatbot/presentaion/views/chatbot_view.dart
 import 'package:connect_hub/features/create_post/presentation/views/create_post_view.dart';
 import 'package:connect_hub/features/home/presentation/views/home_view.dart';
 import 'package:connect_hub/features/post_details/presentation/views/post_details_view.dart';
+import 'package:connect_hub/features/profile/presentation/views/profile_view.dart';
 import 'package:connect_hub/features/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const PostDetailsView());
     case ChatbotView.routeName:
       return MaterialPageRoute(builder: (context) => const ChatbotView());
+    case ProfileView.routeName:
+      return MaterialPageRoute(builder: (context) => const ProfileView());
     default:
       return MaterialPageRoute(builder: (context) => const SizedBox());
   }

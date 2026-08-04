@@ -1,5 +1,6 @@
 import 'package:connect_hub/features/chatbot/presentaion/views/chatbot_view.dart';
 import 'package:connect_hub/features/create_post/presentation/views/create_post_view.dart';
+import 'package:connect_hub/features/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 
@@ -33,6 +34,10 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
     }
     if (index == 2) {
       Navigator.of(context).pushNamed(ChatbotView.routeName);
+      return;
+    }
+    if (index == 3) {
+      Navigator.of(context).pushNamed(ProfileView.routeName);
       return;
     }
     setState(() {
