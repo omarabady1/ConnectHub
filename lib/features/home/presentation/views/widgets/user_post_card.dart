@@ -5,6 +5,7 @@ import '../../../../../utils/app_text_styles.dart';
 import '../../../domain/models/post_model.dart';
 import 'post_card_actions.dart';
 import 'post_card_header.dart';
+import 'post_image.dart';
 
 class UserPostCard extends StatelessWidget {
   final PostModel post;
@@ -57,6 +58,10 @@ class UserPostCard extends StatelessWidget {
                 color: const Color(0xFF464554),
               ),
             ),
+            if (post.mainImageUrl != null && post.mainImageUrl!.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              PostImage(imageUrl: post.mainImageUrl!),
+            ],
             const SizedBox(height: 12),
             PostCardActions(
               likesCount: post.likesCount,

@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
 
-class CreatePostTopAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CreatePostTopAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final VoidCallback? onClosePressed;
   final VoidCallback? onPostPressed;
+  final bool isPosting;
 
   const CreatePostTopAppBar({
     super.key,
     this.onClosePressed,
     this.onPostPressed,
+    this.isPosting = false,
   });
 
   @override
@@ -56,10 +59,7 @@ class CreatePostTopAppBar extends StatelessWidget implements PreferredSizeWidget
             decoration: BoxDecoration(
               color: kBrandIndigo,
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: const Color(0x4DE1E0FF),
-                width: 1,
-              ),
+              border: Border.all(color: const Color(0x4DE1E0FF), width: 1),
               boxShadow: [
                 BoxShadow(
                   color: kBrandIndigo.withValues(alpha: 0.25),
@@ -71,19 +71,28 @@ class CreatePostTopAppBar extends StatelessWidget implements PreferredSizeWidget
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: onPostPressed ?? () {},
+                onTap: isPosting ? null : onPostPressed,
                 borderRadius: BorderRadius.circular(999),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 17,
                     vertical: 9,
                   ),
-                  child: Text(
-                    'Post',
-                    style: AppTextStyles.medium12.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: isPosting
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          'Post',
+                          style: AppTextStyles.medium12.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             ),

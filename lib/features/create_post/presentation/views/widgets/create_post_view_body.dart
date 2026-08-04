@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'create_post_attachment_toolkit.dart';
+import 'create_post_image_preview.dart';
 import 'create_post_inputs.dart';
 import 'create_post_user_info.dart';
 
@@ -9,6 +12,8 @@ class CreatePostViewBody extends StatelessWidget {
   final ValueChanged<String>? onTitleChanged;
   final ValueChanged<String>? onDescriptionChanged;
   final VoidCallback? onAddImagePressed;
+  final VoidCallback? onRemoveImagePressed;
+  final File? selectedImage;
 
   const CreatePostViewBody({
     super.key,
@@ -17,6 +22,8 @@ class CreatePostViewBody extends StatelessWidget {
     this.onTitleChanged,
     this.onDescriptionChanged,
     this.onAddImagePressed,
+    this.onRemoveImagePressed,
+    this.selectedImage,
   });
 
   @override
@@ -37,13 +44,18 @@ class CreatePostViewBody extends StatelessWidget {
                   onTitleChanged: onTitleChanged,
                   onDescriptionChanged: onDescriptionChanged,
                 ),
+                if (selectedImage != null) ...[
+                  const SizedBox(height: 20),
+                  CreatePostImagePreview(
+                    image: selectedImage!,
+                    onRemovePressed: onRemoveImagePressed,
+                  ),
+                ],
               ],
             ),
           ),
         ),
-        CreatePostAttachmentToolkit(
-          onAddImagePressed: onAddImagePressed,
-        ),
+        CreatePostAttachmentToolkit(onAddImagePressed: onAddImagePressed),
       ],
     );
   }
