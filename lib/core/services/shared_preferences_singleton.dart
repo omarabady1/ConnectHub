@@ -7,23 +7,23 @@ class Prefs {
     _instance = await SharedPreferences.getInstance();
   }
 
-  static setBool(String key, bool value) {
+  static void setBool(String key, bool value) {
     _instance.setBool(key, value);
   }
 
-  static getBool(String key) {
+  static bool getBool(String key) {
     return _instance.getBool(key) ?? false;
   }
 
-  static setString(String key, String value) {
+  static void setString(String key, String value) {
     _instance.setString(key, value);
   }
 
-  static getString(String key) {
+  static String? getString(String key) {
     return _instance.getString(key);
   }
 
-  static removeString(String key) {
+  static void removeString(String key) {
     _instance.remove(key);
   }
 }

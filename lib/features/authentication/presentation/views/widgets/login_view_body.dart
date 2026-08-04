@@ -3,6 +3,7 @@ import 'package:connect_hub/features/authentication/presentation/cubits/login_cu
 import 'package:connect_hub/features/authentication/presentation/views/signup_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/widgets/auth_text_field.dart';
 import 'package:connect_hub/features/authentication/presentation/views/widgets/social_button.dart';
+import 'package:connect_hub/features/home/presentation/views/home_view.dart';
 import 'package:connect_hub/generated/assets.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Login successful.')));
+          Navigator.pushReplacementNamed(context, HomeView.routeName);
         }
       },
       builder: (context, state) {

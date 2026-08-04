@@ -104,4 +104,74 @@ abstract class AppTextStyles {
     height: 1.6,
     color: const Color(0xFF6B7280),
   );
+
+  static final homeHeaderTitle = GoogleFonts.inter(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.6,
+    color: const Color(0xFF4648D4),
+  );
+
+  static final postAuthorName = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final postAuthorNameSemibold = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final postSubtitle = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: const Color(0xFF5C5F61),
+  );
+
+  static final postTitleHeading = GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final postBody = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: const Color(0xFF464554),
+  );
+
+  static final yourPostBadgeText = GoogleFonts.inter(
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    color: const Color(0xFF4648D4),
+  );
+
+  static final hashtagChipText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF4648D4),
+  );
+
+  static final actionCounterText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF5C5F61),
+  );
+
+  static final bentoStatValue = GoogleFonts.inter(
+    fontSize: 30,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.6,
+    color: const Color(0xFFFFFBFF),
+  );
+
+  static final bentoStatLabel = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFFFFFBFF),
+  );
 }

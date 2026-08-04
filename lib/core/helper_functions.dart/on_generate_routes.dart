@@ -1,8 +1,8 @@
 import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/signup_view.dart';
+import 'package:connect_hub/features/home/presentation/views/home_view.dart';
 import 'package:connect_hub/features/splash/splash_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -12,7 +12,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const LoginView());
     case SignupView.routeName:
       return MaterialPageRoute(builder: (context) => const SignupView());
+    case HomeView.routeName:
+      return MaterialPageRoute(builder: (context) => const HomeView());
     default:
-      return MaterialPageRoute(builder: (context) => Container());
+      return MaterialPageRoute(builder: (context) => const SizedBox());
   }
 }
