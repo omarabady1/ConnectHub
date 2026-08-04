@@ -44,9 +44,19 @@ class UserPostCard extends StatelessWidget {
               isCurrentUser: true,
             ),
             const SizedBox(height: 12),
-            Text(post.postTitle, style: AppTextStyles.postTitleHeading),
+            Text(
+              post.postTitle,
+              style: AppTextStyles.semiBold20.copyWith(
+                color: const Color(0xFF1B1B23),
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(post.postContent, style: AppTextStyles.postBody),
+            Text(
+              post.postContent,
+              style: AppTextStyles.regular16.copyWith(
+                color: const Color(0xFF464554),
+              ),
+            ),
             const SizedBox(height: 12),
             PostCardActions(
               likesCount: post.likesCount,

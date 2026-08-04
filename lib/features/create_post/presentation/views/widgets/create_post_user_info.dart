@@ -51,7 +51,9 @@ class CreatePostUserInfo extends StatelessWidget {
                       return Center(
                         child: Text(
                           userName.isNotEmpty ? userName[0] : 'A',
-                          style: AppTextStyles.createPostUserName,
+                          style: AppTextStyles.medium16.copyWith(
+                            color: const Color(0xFF1B1B23),
+                          ),
                         ),
                       );
                     },
@@ -59,7 +61,9 @@ class CreatePostUserInfo extends StatelessWidget {
                 : Center(
                     child: Text(
                       userName.isNotEmpty ? userName[0] : 'A',
-                      style: AppTextStyles.createPostUserName,
+                      style: AppTextStyles.medium16.copyWith(
+                        color: const Color(0xFF1B1B23),
+                      ),
                     ),
                   ),
           ),
@@ -68,7 +72,14 @@ class CreatePostUserInfo extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(userName, style: AppTextStyles.createPostUserName)],
+          children: [
+            Text(
+              userName,
+              style: AppTextStyles.medium16.copyWith(
+                color: const Color(0xFF1B1B23),
+              ),
+            ),
+          ],
         ),
       ],
     );

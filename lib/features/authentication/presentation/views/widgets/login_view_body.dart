@@ -100,19 +100,27 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     Center(
                       child: Text(
                         'ConnectHub',
-                        style: AppTextStyles.loginTitle,
+                        style: AppTextStyles.bold28,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
                         'Welcome back to the community.',
-                        style: AppTextStyles.loginSubtitle,
+                        style: AppTextStyles.medium15.copyWith(
+                          color: const Color(0xFF6B7280),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     const SizedBox(height: 28),
-                    Text('EMAIL ADDRESS', style: AppTextStyles.inputLabel),
+                    Text(
+                      'EMAIL ADDRESS',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     AuthTextField(
                       controller: _emailController,
@@ -120,7 +128,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       icon: Icons.email_outlined,
                     ),
                     const SizedBox(height: 20),
-                    Text('PASSWORD', style: AppTextStyles.inputLabel),
+                    Text(
+                      'PASSWORD',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     AuthTextField(
                       controller: _passwordController,
@@ -137,7 +151,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        textStyle: AppTextStyles.loginButton,
+                        textStyle: AppTextStyles.bold16.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                       child: isLoading
                           ? const SizedBox(
@@ -153,7 +169,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               children: [
                                 Text(
                                   'Log In',
-                                  style: AppTextStyles.loginButton,
+                                  style: AppTextStyles.bold16.copyWith(
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 const Icon(Icons.arrow_right_alt, size: 20),
@@ -172,7 +190,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                         const SizedBox(width: 12),
                         Text(
                           'OR CONTINUE WITH',
-                          style: AppTextStyles.secondaryText,
+                          style: AppTextStyles.regular13.copyWith(
+                            color: const Color(0xFF6B7280),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         const Expanded(
@@ -198,7 +218,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       children: [
                         Text(
                           "Don't have an account? ",
-                          style: AppTextStyles.secondaryText,
+                          style: AppTextStyles.regular13.copyWith(
+                            color: const Color(0xFF6B7280),
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -211,7 +233,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                             minimumSize: const Size(44, 22),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: Text('Sign Up', style: AppTextStyles.linkText),
+                          child: Text(
+                            'Sign Up',
+                            style: AppTextStyles.semiBold13.copyWith(
+                              color: const Color(0xFF6366F1),
+                            ),
+                          ),
                         ),
                       ],
                     ),

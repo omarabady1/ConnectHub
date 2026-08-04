@@ -75,7 +75,7 @@ class _PostCardActionsState extends State<PostCardActions> {
                   const SizedBox(width: 4),
                   Text(
                     '$_count',
-                    style: AppTextStyles.actionCounterText.copyWith(
+                    style: AppTextStyles.medium12.copyWith(
                       color: _liked ? activeColor : inactiveColor,
                     ),
                   ),
@@ -100,7 +100,9 @@ class _PostCardActionsState extends State<PostCardActions> {
                   const SizedBox(width: 4),
                   Text(
                     '${widget.commentsCount}',
-                    style: AppTextStyles.actionCounterText,
+                    style: AppTextStyles.medium12.copyWith(
+                      color: inactiveColor,
+                    ),
                   ),
                 ],
               ),

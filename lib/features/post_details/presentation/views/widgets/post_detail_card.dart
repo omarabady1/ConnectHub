@@ -93,10 +93,17 @@ class _PostDetailCardState extends State<PostDetailCard> {
                       children: [
                         Text(
                           widget.authorName,
-                          style: AppTextStyles.postAuthorNameSemibold,
+                          style: AppTextStyles.semiBold12.copyWith(
+                            color: const Color(0xFF1B1B23),
+                          ),
                         ),
                         const SizedBox(height: 2),
-                        Text(widget.timeAgo, style: AppTextStyles.postSubtitle),
+                        Text(
+                          widget.timeAgo,
+                          style: AppTextStyles.regular14.copyWith(
+                            color: const Color(0xFF5C5F61),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -152,7 +159,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                               const SizedBox(width: 4),
                               Text(
                                 widget.likesCount,
-                                style: AppTextStyles.actionCounterText.copyWith(
+                                style: AppTextStyles.medium12.copyWith(
                                   color: _isLiked
                                       ? kBrandIndigo
                                       : kTextSecondaryColor,
@@ -172,7 +179,9 @@ class _PostDetailCardState extends State<PostDetailCard> {
                             const SizedBox(width: 4),
                             Text(
                               widget.commentsCount,
-                              style: AppTextStyles.actionCounterText,
+                              style: AppTextStyles.medium12.copyWith(
+                                color: kTextSecondaryColor,
+                              ),
                             ),
                           ],
                         ),
@@ -183,7 +192,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                 const SizedBox(height: 12),
                 Text(
                   widget.caption,
-                  style: AppTextStyles.postBody.copyWith(
+                  style: AppTextStyles.regular16.copyWith(
                     color: kTextDarkColor,
                     height: 1.5,
                   ),

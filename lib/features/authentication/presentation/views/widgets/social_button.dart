@@ -36,8 +36,7 @@ class SocialButton extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             label,
-            style: AppTextStyles.bodyText.copyWith(
-              fontWeight: FontWeight.w600,
+            style: AppTextStyles.semiBold14.copyWith(
               color: textColor,
             ),
           ),

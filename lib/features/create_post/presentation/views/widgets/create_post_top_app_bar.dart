@@ -47,7 +47,10 @@ class CreatePostTopAppBar extends StatelessWidget implements PreferredSizeWidget
           ),
           Text(
             'Create Post',
-            style: AppTextStyles.createPostHeaderTitle,
+            style: AppTextStyles.bold24.copyWith(
+              color: kBrandIndigo,
+              letterSpacing: -0.6,
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -77,7 +80,9 @@ class CreatePostTopAppBar extends StatelessWidget implements PreferredSizeWidget
                   ),
                   child: Text(
                     'Post',
-                    style: AppTextStyles.createPostButtonText,
+                    style: AppTextStyles.medium12.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

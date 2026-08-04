@@ -45,12 +45,16 @@ class RegularPostCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             post.postTitle,
-            style: AppTextStyles.postTitleHeading,
+            style: AppTextStyles.semiBold20.copyWith(
+              color: const Color(0xFF1B1B23),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             post.postContent,
-            style: AppTextStyles.postBody,
+            style: AppTextStyles.regular16.copyWith(
+              color: const Color(0xFF464554),
+            ),
           ),
           if (post.mainImageUrl != null && post.mainImageUrl!.isNotEmpty) ...[
             const SizedBox(height: 12),

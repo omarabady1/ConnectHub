@@ -30,10 +30,14 @@ class CreatePostInputs extends StatelessWidget {
           child: TextField(
             controller: titleController,
             onChanged: onTitleChanged,
-            style: AppTextStyles.createPostTitleInput,
+            style: AppTextStyles.semiBold20.copyWith(
+              color: const Color(0xFF1B1B23),
+            ),
             decoration: InputDecoration(
               hintText: 'Post title...',
-              hintStyle: AppTextStyles.createPostTitleHint,
+              hintStyle: AppTextStyles.semiBold20.copyWith(
+                color: const Color(0xFF767586),
+              ),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
@@ -45,13 +49,19 @@ class CreatePostInputs extends StatelessWidget {
         TextField(
           controller: descriptionController,
           onChanged: onDescriptionChanged,
-          style: AppTextStyles.createPostDescInput,
+          style: AppTextStyles.regular16.copyWith(
+            color: const Color(0xFF1B1B23),
+            height: 1.5,
+          ),
           maxLines: null,
           minLines: 8,
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
             hintText: "What's on your mind?",
-            hintStyle: AppTextStyles.createPostDescHint,
+            hintStyle: AppTextStyles.regular16.copyWith(
+              color: const Color(0xFF767586),
+              height: 1.5,
+            ),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,

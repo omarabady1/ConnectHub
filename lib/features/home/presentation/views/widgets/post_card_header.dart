@@ -38,8 +38,12 @@ class PostCardHeader extends StatelessWidget {
                   Text(
                     authorName,
                     style: isCurrentUser
-                        ? AppTextStyles.postAuthorNameSemibold
-                        : AppTextStyles.postAuthorName,
+                        ? AppTextStyles.semiBold12.copyWith(
+                            color: const Color(0xFF1B1B23),
+                          )
+                        : AppTextStyles.medium12.copyWith(
+                            color: const Color(0xFF1B1B23),
+                          ),
                   ),
                   if (isCurrentUser) ...[
                     const SizedBox(width: 8),
@@ -54,7 +58,9 @@ class PostCardHeader extends StatelessWidget {
                       ),
                       child: Text(
                         'YOUR POST',
-                        style: AppTextStyles.yourPostBadgeText,
+                        style: AppTextStyles.regular10.copyWith(
+                          color: const Color(0xFF4648D4),
+                        ),
                       ),
                     ),
                   ],
@@ -63,7 +69,9 @@ class PostCardHeader extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 '$authorRole • $timeAgo',
-                style: AppTextStyles.postSubtitle,
+                style: AppTextStyles.regular14.copyWith(
+                  color: const Color(0xFF5C5F61),
+                ),
               ),
             ],
           ),
@@ -117,9 +125,7 @@ class PostCardHeader extends StatelessWidget {
                 child: Center(
                   child: Text(
                     authorName.isNotEmpty ? authorName[0] : '?',
-                    style: AppTextStyles.postAuthorNameSemibold.copyWith(
-                      fontSize: 16,
-                    ),
+                    style: AppTextStyles.semiBold16,
                   ),
                 ),
               );
@@ -142,9 +148,8 @@ class PostCardHeader extends StatelessWidget {
       child: Center(
         child: Text(
           avatarInitial ?? (authorName.isNotEmpty ? authorName[0] : 'M'),
-          style: AppTextStyles.postAuthorNameSemibold.copyWith(
+          style: AppTextStyles.semiBold20.copyWith(
             color: Colors.white,
-            fontSize: 20,
           ),
         ),
       ),

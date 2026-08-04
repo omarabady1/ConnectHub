@@ -116,19 +116,27 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                     Center(
                       child: Text(
                         'Join the Community',
-                        style: AppTextStyles.loginTitle,
+                        style: AppTextStyles.bold28,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
                         'Create your ConnectHub account.',
-                        style: AppTextStyles.loginSubtitle,
+                        style: AppTextStyles.medium15.copyWith(
+                          color: const Color(0xFF6B7280),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     const SizedBox(height: 28),
-                    Text('FULL NAME', style: AppTextStyles.inputLabel),
+                    Text(
+                      'FULL NAME',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     AuthTextField(
                       controller: _nameController,
@@ -136,7 +144,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       icon: Icons.person_outline,
                     ),
                     const SizedBox(height: 20),
-                    Text('EMAIL ADDRESS', style: AppTextStyles.inputLabel),
+                    Text(
+                      'EMAIL ADDRESS',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     AuthTextField(
                       controller: _emailController,
@@ -145,7 +159,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       inputType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 20),
-                    Text('PASSWORD', style: AppTextStyles.inputLabel),
+                    Text(
+                      'PASSWORD',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     AuthTextField(
                       controller: _passwordController,
@@ -156,7 +176,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                     const SizedBox(height: 8),
                     Text(
                       'Must be at least 8 characters.',
-                      style: AppTextStyles.secondaryText,
+                      style: AppTextStyles.regular13.copyWith(
+                        color: const Color(0xFF6B7280),
+                      ),
                     ),
                     const SizedBox(height: 28),
                     FilledButton(
@@ -169,7 +191,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        textStyle: AppTextStyles.loginButton,
+                        textStyle: AppTextStyles.bold16.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                       child: isLoading
                           ? const SizedBox(
@@ -185,7 +209,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                               children: [
                                 Text(
                                   'Sign Up',
-                                  style: AppTextStyles.loginButton,
+                                  style: AppTextStyles.bold16.copyWith(
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 const Icon(Icons.arrow_right_alt, size: 20),
@@ -204,7 +230,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         const SizedBox(width: 12),
                         Text(
                           'or continue with',
-                          style: AppTextStyles.secondaryText,
+                          style: AppTextStyles.regular13.copyWith(
+                            color: const Color(0xFF6B7280),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         const Expanded(
@@ -229,7 +257,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       children: [
                         Text(
                           'Already have an account? ',
-                          style: AppTextStyles.secondaryText,
+                          style: AppTextStyles.regular13.copyWith(
+                            color: const Color(0xFF6B7280),
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -242,7 +272,12 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                             minimumSize: const Size(44, 22),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: Text('Log In', style: AppTextStyles.linkText),
+                          child: Text(
+                            'Log In',
+                            style: AppTextStyles.semiBold13.copyWith(
+                              color: const Color(0xFF6366F1),
+                            ),
+                          ),
                         ),
                       ],
                     ),

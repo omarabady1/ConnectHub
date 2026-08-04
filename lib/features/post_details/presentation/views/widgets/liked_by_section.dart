@@ -11,7 +11,12 @@ class LikedBySection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text('Liked By', style: AppTextStyles.likedByTitle),
+          child: Text(
+            'Liked By',
+            style: AppTextStyles.semiBold20.copyWith(
+              color: const Color(0xFF1B1B23),
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         SingleChildScrollView(
@@ -22,16 +27,36 @@ class LikedBySection extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('David K.', style: AppTextStyles.commentAuthorName),
-                  Text('Product Designer', style: AppTextStyles.postSubtitle),
+                  Text(
+                    'David K.',
+                    style: AppTextStyles.semiBold12.copyWith(
+                      color: const Color(0xFF1B1B23),
+                    ),
+                  ),
+                  Text(
+                    'Product Designer',
+                    style: AppTextStyles.regular14.copyWith(
+                      color: const Color(0xFF5C5F61),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(width: 24),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Sarah J.', style: AppTextStyles.commentAuthorName),
-                  Text('Developer', style: AppTextStyles.postSubtitle),
+                  Text(
+                    'Sarah J.',
+                    style: AppTextStyles.semiBold12.copyWith(
+                      color: const Color(0xFF1B1B23),
+                    ),
+                  ),
+                  Text(
+                    'Developer',
+                    style: AppTextStyles.regular14.copyWith(
+                      color: const Color(0xFF5C5F61),
+                    ),
+                  ),
                 ],
               ),
             ],

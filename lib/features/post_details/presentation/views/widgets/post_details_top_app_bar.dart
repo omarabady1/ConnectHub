@@ -48,7 +48,10 @@ class PostDetailsTopAppBar extends StatelessWidget implements PreferredSizeWidge
           ),
           Text(
             'Post Details',
-            style: AppTextStyles.homeHeaderTitle,
+            style: AppTextStyles.bold24.copyWith(
+              color: kBrandIndigo,
+              letterSpacing: -0.6,
+            ),
           ),
           IconButton(
             onPressed: onMorePressed ?? () {},

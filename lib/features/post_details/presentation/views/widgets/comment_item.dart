@@ -46,12 +46,20 @@ class _CommentItemState extends State<CommentItem> {
                   children: [
                     Text(
                       widget.comment.authorName,
-                      style: AppTextStyles.commentAuthorName,
+                      style: AppTextStyles.semiBold12.copyWith(
+                        color: const Color(0xFF1B1B23),
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(widget.comment.content, style: AppTextStyles.commentText),
+                Text(
+                  widget.comment.content,
+                  style: AppTextStyles.regular14.copyWith(
+                    color: const Color(0xFF1B1B23),
+                    height: 1.4,
+                  ),
+                ),
               ],
             ),
           ),

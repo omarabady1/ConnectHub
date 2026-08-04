@@ -47,7 +47,10 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Text(
             'ConnectHub',
-            style: AppTextStyles.homeHeaderTitle,
+            style: AppTextStyles.bold24.copyWith(
+              color: kBrandIndigo,
+              letterSpacing: -0.6,
+            ),
           ),
           IconButton(
             onPressed: onNotificationsPressed ?? () {},

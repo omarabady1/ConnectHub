@@ -20,7 +20,9 @@ class CreatePostAttachmentToolkit extends StatelessWidget {
         children: [
           Text(
             'Add to your post',
-            style: AppTextStyles.createPostAttachmentLabel,
+            style: AppTextStyles.medium12.copyWith(
+              color: const Color(0xFF5C5F61),
+            ),
           ),
           Container(
             width: 40,

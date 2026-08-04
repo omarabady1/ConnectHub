@@ -81,7 +81,9 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 opacity: _fadeAnimation,
                 child: Text(
                   'Share, Connect, and Discover',
-                  style: AppTextStyles.splashSlogan,
+                  style: AppTextStyles.medium15.copyWith(
+                    color: const Color(0xFF6B7280),
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

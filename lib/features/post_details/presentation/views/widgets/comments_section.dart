@@ -37,7 +37,9 @@ class CommentsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Text(
             'Comments ($totalComments)',
-            style: AppTextStyles.likedByTitle,
+            style: AppTextStyles.semiBold20.copyWith(
+              color: const Color(0xFF1B1B23),
+            ),
           ),
         ),
         const SizedBox(height: 16),

@@ -1,283 +1,112 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTextStyles {
-  static final appBarTitle = GoogleFonts.inter(
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
-  );
-
-  static final cardTitle = GoogleFonts.inter(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    height: 1.2,
-  );
-
-  static final cardSubtitle = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-    height: 1.3,
-  );
-
-  static final bodyText = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.6,
-  );
-
-  static final caption = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-  );
-
-  static final smallLabel = GoogleFonts.inter(
-    fontSize: 11,
-    fontWeight: FontWeight.w500,
-    height: 1.4,
-  );
-
-  static final chipLabel = GoogleFonts.inter(
-    fontSize: 11,
-    fontWeight: FontWeight.w600,
-    height: 1.3,
-  );
-
-  static final loginTitle = GoogleFonts.inter(
-    fontSize: 28,
-    fontWeight: FontWeight.w800,
-    height: 1.12,
-  );
-
-  static final loginSubtitle = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w500,
-    height: 1.5,
-    color: const Color(0xFF6B7280),
-  );
-
-  static final inputLabel = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.8,
-    height: 1.4,
-    color: const Color(0xFF4B5563),
-  );
-
-  static final inputText = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w500,
-    height: 1.5,
-    color: const Color(0xFF111827),
-  );
-
-  static final loginButton = GoogleFonts.inter(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    color: const Color(0xFFFFFFFF),
-  );
-
-  static final linkText = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-    color: const Color(0xFF6366F1),
-  );
-
-  static final secondaryText = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: const Color(0xFF6B7280),
-  );
-
-  static final splashHeading = GoogleFonts.inter(
-    fontSize: 22,
-    fontWeight: FontWeight.w700,
-    height: 1.18,
-  );
-
-  static final splashSlogan = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w500,
-    height: 1.6,
-    color: const Color(0xFF6B7280),
-  );
-
-  static final homeHeaderTitle = GoogleFonts.inter(
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.6,
-    color: const Color(0xFF4648D4),
-  );
-
-  static final postAuthorName = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final postAuthorNameSemibold = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final postSubtitle = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: const Color(0xFF5C5F61),
-  );
-
-  static final postTitleHeading = GoogleFonts.inter(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final postBody = GoogleFonts.inter(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: const Color(0xFF464554),
-  );
-
-  static final yourPostBadgeText = GoogleFonts.inter(
+  // Regular (w400)
+  static final regular10 = GoogleFonts.cairo(
     fontSize: 10,
     fontWeight: FontWeight.w400,
-    color: const Color(0xFF4648D4),
+  );
+  static final regular12 = GoogleFonts.cairo(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+  static final regular13 = GoogleFonts.cairo(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+  );
+  static final regular14 = GoogleFonts.cairo(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+  static final regular15 = GoogleFonts.cairo(
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+  );
+  static final regular16 = GoogleFonts.cairo(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
   );
 
-  static final hashtagChipText = GoogleFonts.inter(
+  // Medium (w500)
+  static final medium11 = GoogleFonts.cairo(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+  );
+  static final medium12 = GoogleFonts.cairo(
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    color: const Color(0xFF4648D4),
   );
-
-  static final actionCounterText = GoogleFonts.inter(
-    fontSize: 12,
+  static final medium13 = GoogleFonts.cairo(
+    fontSize: 13,
     fontWeight: FontWeight.w500,
-    color: const Color(0xFF5C5F61),
+  );
+  static final medium14 = GoogleFonts.cairo(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
+  static final medium15 = GoogleFonts.cairo(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+  );
+  static final medium16 = GoogleFonts.cairo(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 
-  static final bentoStatValue = GoogleFonts.inter(
-    fontSize: 30,
+  // SemiBold (w600)
+  static final semiBold11 = GoogleFonts.cairo(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold12 = GoogleFonts.cairo(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold13 = GoogleFonts.cairo(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold14 = GoogleFonts.cairo(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold16 = GoogleFonts.cairo(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold18 = GoogleFonts.cairo(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold20 = GoogleFonts.cairo(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+
+  // Bold (w700 & w800)
+  static final bold16 = GoogleFonts.cairo(
+    fontSize: 16,
     fontWeight: FontWeight.w700,
-    letterSpacing: -0.6,
-    color: const Color(0xFFFFFBFF),
   );
-
-  static final bentoStatLabel = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFFFFFBFF),
+  static final bold20 = GoogleFonts.cairo(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
   );
-
-  static final createPostHeaderTitle = GoogleFonts.inter(
+  static final bold22 = GoogleFonts.cairo(
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+  );
+  static final bold24 = GoogleFonts.cairo(
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    letterSpacing: -0.6,
-    color: const Color(0xFF4648D4),
   );
-
-  static final createPostButtonText = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFFFFFFFF),
+  static final bold28 = GoogleFonts.cairo(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
   );
-
-  static final createPostUserName = GoogleFonts.inter(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final createPostAudienceText = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: const Color(0xFF5C5F61),
-  );
-
-  static final createPostTitleHint = GoogleFonts.inter(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xFF767586),
-  );
-
-  static final createPostTitleInput = GoogleFonts.inter(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final createPostDescHint = GoogleFonts.inter(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: const Color(0xFF767586),
-  );
-
-  static final createPostDescInput = GoogleFonts.inter(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final createPostAttachmentLabel = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFF5C5F61),
-  );
-
-  static final followButtonText = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFFFFFBFF),
-  );
-
-  static final likedByTitle = GoogleFonts.inter(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final likedByButtonText = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFF4648D4),
-  );
-
-  static final commentAuthorName = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final commentTimeAgo = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: const Color(0xFF5C5F61),
-  );
-
-  static final commentText = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: const Color(0xFF1B1B23),
-  );
-
-  static final commentActionText = GoogleFonts.inter(
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: const Color(0xFF5C5F61),
-  );
-
-  static final addCommentHintText = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: const Color(0xFF5C5F61),
+  static final bold30 = GoogleFonts.cairo(
+    fontSize: 30,
+    fontWeight: FontWeight.w700,
   );
 }

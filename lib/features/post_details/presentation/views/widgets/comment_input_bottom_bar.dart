@@ -77,10 +77,14 @@ class _CommentInputBottomBarState extends State<CommentInputBottomBar> {
                     child: TextField(
                       controller: _controller,
                       onSubmitted: (_) => _handleSend(),
-                      style: AppTextStyles.commentText,
+                      style: AppTextStyles.regular14.copyWith(
+                        color: const Color(0xFF1B1B23),
+                      ),
                       decoration: InputDecoration(
                         hintText: 'Add a comment...',
-                        hintStyle: AppTextStyles.addCommentHintText,
+                        hintStyle: AppTextStyles.regular14.copyWith(
+                          color: const Color(0xFF5C5F61),
+                        ),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
