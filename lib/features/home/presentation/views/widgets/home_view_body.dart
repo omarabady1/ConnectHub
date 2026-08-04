@@ -36,7 +36,6 @@ class HomeViewBody extends StatelessWidget {
       postTitle: 'The Intersection of Code and Canvas',
       postContent:
           "Been thinking a lot about how procedural generation is changing the landscape of digital art. It's no longer just about the output, but the elegance of the algorithm itself. Who else is diving deep into shaders lately?",
-      tags: ['#creativecoding', '#shaders'],
       likesCount: 1,
       commentsCount: 0,
       isLiked: true,

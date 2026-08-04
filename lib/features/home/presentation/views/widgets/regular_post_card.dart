@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/post_details/presentation/views/post_details_view.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
@@ -12,20 +13,24 @@ class RegularPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: kBrandIndigo.withValues(alpha: 0.15),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(PostDetailsView.routeName);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: kBrandIndigo.withValues(alpha: 0.15),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -88,6 +93,7 @@ class RegularPostCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

@@ -231,4 +231,53 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: const Color(0xFF5C5F61),
   );
+
+  static final followButtonText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFFFFFBFF),
+  );
+
+  static final likedByTitle = GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final likedByButtonText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF4648D4),
+  );
+
+  static final commentAuthorName = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final commentTimeAgo = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: const Color(0xFF5C5F61),
+  );
+
+  static final commentText = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final commentActionText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF5C5F61),
+  );
+
+  static final addCommentHintText = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: const Color(0xFF5C5F61),
+  );
 }

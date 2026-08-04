@@ -9,7 +9,6 @@ class PostModel {
   final String postTitle;
   final String postContent;
   final String? mainImageUrl;
-  final List<String>? tags;
   final int likesCount;
   final int commentsCount;
   final bool isLiked;
@@ -25,7 +24,6 @@ class PostModel {
     required this.postTitle,
     required this.postContent,
     this.mainImageUrl,
-    this.tags,
     required this.likesCount,
     required this.commentsCount,
     this.isLiked = false,

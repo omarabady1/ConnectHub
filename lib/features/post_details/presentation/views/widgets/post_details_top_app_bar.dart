@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import '../../../../../constants.dart';
+import '../../../../../utils/app_text_styles.dart';
+
+/// Top App Bar for Post Details screen matching Figma node 1:208.
+class PostDetailsTopAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback? onBackPressed;
+  final VoidCallback? onMorePressed;
+
+  const PostDetailsTopAppBar({
+    super.key,
+    this.onBackPressed,
+    this.onMorePressed,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(64);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: preferredSize.height + MediaQuery.of(context).padding.top,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top,
+        left: 16,
+        right: 16,
+      ),
+      decoration: BoxDecoration(
+        color: kHomeBackgroundColor.withValues(alpha: 0.95),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0D000000),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: kTextDarkColor,
+              size: 24,
+            ),
+          ),
+          Text(
+            'Post Details',
+            style: AppTextStyles.homeHeaderTitle,
+          ),
+          IconButton(
+            onPressed: onMorePressed ?? () {},
+            icon: const Icon(
+              Icons.more_vert_rounded,
+              color: kTextDarkColor,
+              size: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
