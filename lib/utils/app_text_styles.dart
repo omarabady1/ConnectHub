@@ -174,4 +174,61 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: const Color(0xFFFFFBFF),
   );
+
+  static final createPostHeaderTitle = GoogleFonts.inter(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.6,
+    color: const Color(0xFF4648D4),
+  );
+
+  static final createPostButtonText = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFFFFFFFF),
+  );
+
+  static final createPostUserName = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final createPostAudienceText = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: const Color(0xFF5C5F61),
+  );
+
+  static final createPostTitleHint = GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: const Color(0xFF767586),
+  );
+
+  static final createPostTitleInput = GoogleFonts.inter(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final createPostDescHint = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: const Color(0xFF767586),
+  );
+
+  static final createPostDescInput = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: const Color(0xFF1B1B23),
+  );
+
+  static final createPostAttachmentLabel = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFF5C5F61),
+  );
 }

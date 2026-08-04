@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/create_post/presentation/views/create_post_view.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 
@@ -25,6 +26,10 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
   }
 
   void _onItemClick(int index) {
+    if (index == 1) {
+      Navigator.of(context).pushNamed(CreatePostView.routeName);
+      return;
+    }
     setState(() {
       _currentIndex = index;
     });

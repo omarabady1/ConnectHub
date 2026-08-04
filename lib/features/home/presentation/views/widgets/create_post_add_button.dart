@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/create_post/presentation/views/create_post_view.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 
@@ -25,7 +26,10 @@ class CreatePostAddButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onPressed ?? () {},
+          onTap: onPressed ??
+              () {
+                Navigator.of(context).pushNamed(CreatePostView.routeName);
+              },
           customBorder: const CircleBorder(),
           child: const Center(
             child: Icon(Icons.add_rounded, color: Colors.white, size: 28),
