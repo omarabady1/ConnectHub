@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class PostModel {
   final String id;
+  final String userId;
   final String authorName;
   final String authorRole;
   final String timeAgo;
@@ -15,6 +18,7 @@ class PostModel {
 
   const PostModel({
     required this.id,
+    this.userId = '',
     required this.authorName,
     required this.authorRole,
     required this.timeAgo,
@@ -31,15 +35,19 @@ class PostModel {
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     final createdAt = _stringValue(map['createdAt']);
+    final postUserId = _stringValue(map['userId']);
+    final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     return PostModel(
       id: _stringValue(map['id']),
+      userId: postUserId,
       authorName: _stringValue(map['authorName'], fallback: 'Anonymous'),
       authorRole: _stringValue(map['authorRole'], fallback: 'Member'),
       timeAgo: _timeAgoFrom(createdAt),
       avatarUrl: _nullableStringValue(map['avatarUrl']),
       avatarInitial: _nullableStringValue(map['avatarInitial']),
-      isCurrentUser: _boolValue(map['isCurrentUser']),
+      isCurrentUser:
+          postUserId.isNotEmpty && postUserId == currentUid,
       postTitle: _stringValue(map['postTitle']),
       postContent: _stringValue(map['postContent']),
       mainImageUrl: _nullableStringValue(
@@ -56,12 +64,12 @@ class PostModel {
 
     return {
       'id': id,
+      'userId': userId,
       'authorName': authorName,
       'authorRole': authorRole,
       'createdAt': createdAt,
       'avatarUrl': avatarUrl,
       'avatarInitial': avatarInitial,
-      'isCurrentUser': isCurrentUser,
       'postTitle': postTitle,
       'postContent': postContent,
       'imageUrl': mainImageUrl,

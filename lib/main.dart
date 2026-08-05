@@ -1,7 +1,7 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/helper_functions.dart/on_generate_routes.dart';
 import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
-import 'package:connect_hub/features/home/presentation/views/home_view.dart';
+import 'package:connect_hub/features/splash/splash_view.dart';
 import 'package:connect_hub/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: onGenerateRoute,
-      initialRoute: HomeView.routeName,
+      initialRoute: SplashView.routeName,
     );
   }
 }
