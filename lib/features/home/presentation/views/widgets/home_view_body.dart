@@ -1,84 +1,67 @@
-import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/core/services/database_service.dart';
-import 'package:connect_hub/core/utils/backend_endpoints.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../constants.dart';
-import '../../../domain/models/post_model.dart';
+
+import '../../cubits/home_cubit.dart';
 import 'regular_post_card.dart';
 import 'user_post_card.dart';
 
-class HomeViewBody extends StatefulWidget {
+class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
-
-  @override
-  State<HomeViewBody> createState() => _HomeViewBodyState();
-}
-
-class _HomeViewBodyState extends State<HomeViewBody> {
-  late Future<List<PostModel>> _postsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _postsFuture = _loadPosts();
-  }
-
-  Future<List<PostModel>> _loadPosts() async {
-    final postsData = await getIt<DatabaseService>().getData(
-      path: BackendEndpoints.posts,
-      query: const {'orderBy': 'createdAt', 'descending': true},
-    );
-
-    if (postsData is! List) return [];
-
-    final firebasePosts = postsData
-        .whereType<Map<String, dynamic>>()
-        .map(PostModel.fromMap)
-        .toList();
-
-    return [...firebasePosts];
-  }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        final future = _loadPosts();
-        setState(() {
-          _postsFuture = future;
-        });
-        await future;
+        await context.read<HomeCubit>().loadPosts();
       },
       child: Container(
         color: kHomeBackgroundColor,
-        child: FutureBuilder<List<PostModel>>(
-          future: _postsFuture,
-          builder: (context, snapshot) {
-            final posts = snapshot.data ?? [];
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoading) {
               return const Center(child: CircularProgressIndicator());
+            } else if (state is HomeError) {
+              return Center(child: Text(state.errMessage));
+            } else if (state is HomeLoaded) {
+              final posts = state.posts;
+
+              if (posts.isEmpty) {
+                return const Center(child: Text('No posts yet.'));
+              }
+
+              return ListView.separated(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                  bottom: 100,
+                ),
+                itemCount: posts.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                itemBuilder: (context, index) {
+                  final post = posts[index];
+                  if (post.isCurrentUser) {
+                    return UserPostCard(
+                      post: post,
+                      onPostUpdated: (updatedPost) {
+                        context.read<HomeCubit>().updatePost(updatedPost);
+                      },
+                    );
+                  } else {
+                    return RegularPostCard(
+                      post: post,
+                      onPostUpdated: (updatedPost) {
+                        context.read<HomeCubit>().updatePost(updatedPost);
+                      },
+                    );
+                  }
+                },
+              );
             }
 
-            return ListView.separated(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 16,
-                bottom: 100,
-              ),
-              itemCount: posts.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final post = posts[index];
-                if (post.isCurrentUser) {
-                  return UserPostCard(post: post);
-                } else {
-                  return RegularPostCard(post: post);
-                }
-              },
-            );
+            return const SizedBox();
           },
         ),
       ),

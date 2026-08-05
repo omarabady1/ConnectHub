@@ -6,6 +6,10 @@ import '../../../create_post/presentation/views/create_post_view.dart';
 import '../../../profile/presentation/views/widgets/profile_drawer.dart';
 import '../../../profile/presentation/views/widgets/profile_top_app_bar.dart';
 import '../../../profile/presentation/views/widgets/profile_view_body.dart';
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
+import 'package:connect_hub/core/services/database_service.dart';
+import 'package:connect_hub/features/home/presentation/cubits/home_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/create_post_add_button.dart';
 import 'widgets/home_bottom_nav_bar.dart';
 import 'widgets/home_top_app_bar.dart';
@@ -81,7 +85,13 @@ class _HomeViewState extends State<HomeView> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          HomeViewBody(key: ValueKey(_feedRefreshKey)),
+          BlocProvider(
+            key: ValueKey(_feedRefreshKey),
+            create: (context) => HomeCubit(
+              databaseService: getIt<DatabaseService>(),
+            )..loadPosts(),
+            child: const HomeViewBody(),
+          ),
           ChatbotViewBody(key: _chatBodyKey),
           const ProfileViewBody(),
         ],
