@@ -1,4 +1,5 @@
 import 'package:connect_hub/features/post_details/presentation/views/post_details_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
@@ -10,19 +11,40 @@ import 'post_image.dart';
 class UserPostCard extends StatelessWidget {
   final PostModel post;
   final ValueChanged<PostModel>? onPostUpdated;
+  final ValueChanged<String>? onPostRemoved;
+  final Future<void> Function(PostModel post)? onPostDeleted;
 
-  const UserPostCard({super.key, required this.post, this.onPostUpdated});
+  const UserPostCard({
+    super.key,
+    required this.post,
+    this.onPostUpdated,
+    this.onPostRemoved,
+    this.onPostDeleted,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    final canDeletePost =
+        currentUserId != null &&
+        post.userId.isNotEmpty &&
+        currentUserId == post.userId &&
+        onPostDeleted != null;
+
     return GestureDetector(
       onTap: () async {
-        final updatedPost = await Navigator.of(context).pushNamed(
-          PostDetailsView.routeName,
-          arguments: post,
-        );
+        final updatedPost = await Navigator.of(
+          context,
+        ).pushNamed(PostDetailsView.routeName, arguments: post);
         if (updatedPost is PostModel && onPostUpdated != null) {
           onPostUpdated!(updatedPost);
+        } else if (updatedPost is PostDetailsDeletedResult) {
+          onPostRemoved?.call(updatedPost.postId);
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Post deleted.')));
         }
       },
       child: Container(
@@ -50,6 +72,9 @@ class UserPostCard extends StatelessWidget {
               avatarUrl: post.avatarUrl,
               avatarInitial: post.avatarInitial,
               isCurrentUser: true,
+              onDeletePressed: canDeletePost
+                  ? () => _confirmDeletePost(context)
+                  : null,
             ),
             const SizedBox(height: 12),
             Text(
@@ -81,5 +106,43 @@ class UserPostCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _confirmDeletePost(BuildContext context) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete post?'),
+        content: const Text('This post will be removed from your feed.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFFD92D20),
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true || !context.mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await onPostDeleted?.call(post);
+
+      messenger.showSnackBar(const SnackBar(content: Text('Post deleted.')));
+    } catch (_) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Could not delete this post. Please try again.'),
+        ),
+      );
+    }
   }
 }

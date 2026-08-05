@@ -39,7 +39,8 @@ class HomeViewBody extends StatelessWidget {
                   bottom: 100,
                 ),
                 itemCount: posts.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16),
                 itemBuilder: (context, index) {
                   final post = posts[index];
                   if (post.isCurrentUser) {
@@ -47,6 +48,12 @@ class HomeViewBody extends StatelessWidget {
                       post: post,
                       onPostUpdated: (updatedPost) {
                         context.read<HomeCubit>().updatePost(updatedPost);
+                      },
+                      onPostRemoved: (postId) {
+                        context.read<HomeCubit>().removePost(postId);
+                      },
+                      onPostDeleted: (post) {
+                        return context.read<HomeCubit>().deletePost(post);
                       },
                     );
                   } else {

@@ -10,7 +10,7 @@ class PostCardHeader extends StatelessWidget {
   final String? avatarUrl;
   final String? avatarInitial;
   final bool isCurrentUser;
-  final VoidCallback? onMorePressed;
+  final VoidCallback? onDeletePressed;
 
   const PostCardHeader({
     super.key,
@@ -20,7 +20,7 @@ class PostCardHeader extends StatelessWidget {
     this.avatarUrl,
     this.avatarInitial,
     this.isCurrentUser = false,
-    this.onMorePressed,
+    this.onDeletePressed,
   });
 
   @override
@@ -29,8 +29,8 @@ class PostCardHeader extends StatelessWidget {
       children: [
         UserAvatar(
           avatarUrl: avatarUrl,
-          initial: avatarInitial ??
-              (authorName.isNotEmpty ? authorName[0] : '?'),
+          initial:
+              avatarInitial ?? (authorName.isNotEmpty ? authorName[0] : '?'),
           size: 44,
           border: isCurrentUser
               ? Border.all(color: kBrandIndigo, width: 2)
@@ -85,17 +85,46 @@ class PostCardHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          onPressed: onMorePressed ?? () {},
-          icon: const Icon(
-            Icons.more_horiz,
-            color: kTextSecondaryColor,
-            size: 20,
+        if (onDeletePressed != null)
+          PopupMenuButton<_PostCardAction>(
+            onSelected: (action) {
+              switch (action) {
+                case _PostCardAction.delete:
+                  onDeletePressed?.call();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem<_PostCardAction>(
+                value: _PostCardAction.delete,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.delete_outline_rounded,
+                      color: Color(0xFFD92D20),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Delete post',
+                      style: AppTextStyles.medium12.copyWith(
+                        color: const Color(0xFFD92D20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            icon: const Icon(
+              Icons.more_horiz,
+              color: kTextSecondaryColor,
+              size: 20,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
           ),
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-        ),
       ],
     );
   }
 }
+
+enum _PostCardAction { delete }

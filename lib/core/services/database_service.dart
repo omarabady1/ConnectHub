@@ -11,6 +11,8 @@ abstract class DatabaseService {
     required Map<String, dynamic> data,
   });
 
+  Future<void> deleteData({required String path, required String docId});
+
   Future<bool> checkIfValueExists(
     String collection,
     String field,

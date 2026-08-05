@@ -27,6 +27,11 @@ class FirestoreService implements DatabaseService {
   }
 
   @override
+  Future<void> deleteData({required String path, required String docId}) async {
+    await firestore.collection(path).doc(docId).delete();
+  }
+
+  @override
   Future<bool> checkIfValueExists(
     String collection,
     String field,
@@ -115,4 +120,3 @@ class FirestoreService implements DatabaseService {
     }
   }
 }
-
