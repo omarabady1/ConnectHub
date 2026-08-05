@@ -24,10 +24,13 @@ class PostDetailsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: kHomeBackgroundColor,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        color: kHomeBackgroundColor,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding: const EdgeInsets.all(16),
         children: [
           PostDetailCard(
             post: post,
@@ -45,6 +48,7 @@ class PostDetailsViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 24),
         ],
+      ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants.dart';
 import '../../../home/domain/models/post_model.dart';
+import '../../../home/presentation/views/home_view.dart';
 import '../../../home/presentation/views/widgets/home_bottom_nav_bar.dart';
 import 'widgets/comment_input_bottom_bar.dart';
 import 'widgets/post_details_top_app_bar.dart';
@@ -66,33 +67,41 @@ class _PostDetailsScaffold extends StatelessWidget {
               Navigator.of(context).pop(cubit.state.post);
             },
           ),
-          body: BlocBuilder<PostDetailsCubit, PostDetailsState>(
-            builder: (context, state) {
-              return PostDetailsViewBody(
-                post: state.post,
-                comments: state.comments,
-                isLoadingComments: state is PostDetailsLoading || state is PostDetailsInitial,
-                likedByUsers: state.likedByUsers,
-                onLikePressed: cubit.toggleLike,
-              );
-            },
-          ),
-          bottomNavigationBar:
+          body: Column(
+            children: [
+              Expanded(
+                child: BlocBuilder<PostDetailsCubit, PostDetailsState>(
+                  builder: (context, state) {
+                    return PostDetailsViewBody(
+                      post: state.post,
+                      comments: state.comments,
+                      isLoadingComments: state is PostDetailsLoading || state is PostDetailsInitial,
+                      likedByUsers: state.likedByUsers,
+                      onLikePressed: cubit.toggleLike,
+                    );
+                  },
+                ),
+              ),
               BlocBuilder<PostDetailsCubit, PostDetailsState>(
-            buildWhen: (prev, curr) =>
-                prev.isSendingComment !=
-                curr.isSendingComment,
-            builder: (context, state) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CommentInputBottomBar(
+                buildWhen: (prev, curr) =>
+                    prev.isSendingComment != curr.isSendingComment,
+                builder: (context, state) {
+                  return CommentInputBottomBar(
                     onSendComment: cubit.addComment,
                     isSending: state.isSendingComment,
-                  ),
-                  const HomeBottomNavBar(selectedIndex: 0),
-                ],
-              );
+                  );
+                },
+              ),
+            ],
+          ),
+          bottomNavigationBar: HomeBottomNavBar(
+            selectedIndex: 0,
+            onItemTapped: (index) {
+              final updatedPost = cubit.state.post;
+              Navigator.of(context).pop(updatedPost);
+              if (index != 0) {
+                homeViewKey.currentState?.onTabChanged(index);
+              }
             },
           ),
         ),

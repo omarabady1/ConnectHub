@@ -16,22 +16,24 @@ import 'widgets/home_top_app_bar.dart';
 import 'widgets/home_view_body.dart';
 
 
+final GlobalKey<HomeViewState> homeViewKey = GlobalKey<HomeViewState>();
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   static const String routeName = '/home';
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomeView> createState() => HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class HomeViewState extends State<HomeView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _chatBodyKey = GlobalKey<ChatbotViewBodyState>();
   int _selectedIndex = 0;
   int _feedRefreshKey = 0;
 
-  void _onTabChanged(int index) {
+  void onTabChanged(int index) {
     if (index == _selectedIndex) return;
     setState(() {
       _selectedIndex = index;
@@ -104,7 +106,7 @@ class _HomeViewState extends State<HomeView> {
           : null,
       bottomNavigationBar: HomeBottomNavBar(
         selectedIndex: _selectedIndex,
-        onItemTapped: _onTabChanged,
+        onItemTapped: onTabChanged,
       ),
       ),
     );
