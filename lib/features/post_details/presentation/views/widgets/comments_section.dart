@@ -3,29 +3,16 @@ import 'package:connect_hub/features/post_details/presentation/views/widgets/com
 import 'package:flutter/material.dart';
 import '../../../../../utils/app_text_styles.dart';
 
-/// Comments section displaying post comments list and reply options.
 class CommentsSection extends StatelessWidget {
   final int totalComments;
   final List<CommentModel> comments;
+  final bool isLoading;
 
   const CommentsSection({
     super.key,
-    this.totalComments = 342,
-    this.comments = const [
-      CommentModel(
-        authorName: 'Maria Garcia',
-        avatarUrl:
-            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150',
-        content: "hi, how are you?",
-      ),
-      CommentModel(
-        authorName: 'James Chen',
-        avatarUrl:
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150',
-        content: 'nice post, keep it up',
-     
-      ),
-    ],
+    required this.totalComments,
+    required this.comments,
+    this.isLoading = false,
   });
 
   @override
@@ -43,15 +30,37 @@ class CommentsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: comments.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            return CommentItem(comment: comments[index]);
-          },
-        ),
+        if (isLoading)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          )
+        else if (comments.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 24,
+            ),
+            child: Text(
+              'No comments yet. Be the first to comment!',
+              style: AppTextStyles.regular14.copyWith(
+                color: const Color(0xFF5C5F61),
+              ),
+            ),
+          )
+        else
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: comments.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              return CommentItem(comment: comments[index]);
+            },
+          ),
       ],
     );
   }

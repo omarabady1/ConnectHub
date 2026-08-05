@@ -7,6 +7,7 @@ import 'package:connect_hub/features/authentication/data/repos/auth_repo_impleme
 import 'package:connect_hub/features/chatbot/data/services/chat_service.dart';
 import 'package:connect_hub/features/chatbot/data/services/chat_storage_service.dart';
 import 'package:connect_hub/features/chatbot/data/services/chatbot_api_service.dart';
+import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../features/authentication/domain/repos/auth_repo.dart';
 
@@ -25,5 +26,11 @@ void setupServiceLocator() {
   getIt.registerSingleton<ChatService>(ChatService());
   getIt.registerSingleton<ChatbotApiService>(ChatbotApiService());
   getIt.registerSingleton<ChatStorageService>(ChatStorageService());
+  getIt.registerLazySingleton<PostInteractionService>(
+    () => PostInteractionService(
+      databaseService: getIt<DatabaseService>(),
+    ),
+  );
 }
+
 

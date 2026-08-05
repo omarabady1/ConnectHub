@@ -1,30 +1,25 @@
 import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/utils/user_avatar.dart';
 
-class CommentItem extends StatefulWidget {
+class CommentItem extends StatelessWidget {
   final CommentModel comment;
 
   const CommentItem({super.key, required this.comment});
 
   @override
-  State<CommentItem> createState() => _CommentItemState();
-}
-
-class _CommentItemState extends State<CommentItem> {
-  @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: Image.network(widget.comment.avatarUrl, fit: BoxFit.cover),
-          ),
+        UserAvatar(
+          avatarUrl: comment.avatarUrl,
+          initial: comment.avatarInitial ??
+              (comment.authorName.isNotEmpty
+                  ? comment.authorName[0]
+                  : '?'),
+          size: 32,
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -42,19 +37,27 @@ class _CommentItemState extends State<CommentItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.comment.authorName,
+                      comment.authorName,
                       style: AppTextStyles.semiBold12.copyWith(
                         color: const Color(0xFF1B1B23),
+                      ),
+                    ),
+                    Text(
+                      comment.timeAgo,
+                      style: AppTextStyles.regular14.copyWith(
+                        color: const Color(0xFF9E9EA7),
+                        fontSize: 11,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  widget.comment.content,
+                  comment.content,
                   style: AppTextStyles.regular14.copyWith(
                     color: const Color(0xFF1B1B23),
                     height: 1.4,

@@ -4,16 +4,15 @@ import '../../../../../constants.dart';
 import '../../../../../core/utils/user_avatar.dart';
 import '../../../../../utils/app_text_styles.dart';
 
-class PostDetailCard extends StatefulWidget {
+class PostDetailCard extends StatelessWidget {
   final PostModel post;
-  const PostDetailCard({super.key, required this.post});
+  final VoidCallback? onLikePressed;
 
-  @override
-  State<PostDetailCard> createState() => _PostDetailCardState();
-}
-
-class _PostDetailCardState extends State<PostDetailCard> {
-  bool _isLiked = true;
+  const PostDetailCard({
+    super.key,
+    required this.post,
+    this.onLikePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,10 @@ class _PostDetailCardState extends State<PostDetailCard> {
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Color(0xFFE4E1ED), width: 1),
+                bottom: BorderSide(
+                  color: Color(0xFFE4E1ED),
+                  width: 1,
+                ),
               ),
             ),
             child: Row(
@@ -47,10 +49,10 @@ class _PostDetailCardState extends State<PostDetailCard> {
                 Row(
                   children: [
                     UserAvatar(
-                      avatarUrl: widget.post.avatarUrl,
-                      initial: widget.post.avatarInitial ??
-                          (widget.post.authorName.isNotEmpty
-                              ? widget.post.authorName[0]
+                      avatarUrl: post.avatarUrl,
+                      initial: post.avatarInitial ??
+                          (post.authorName.isNotEmpty
+                              ? post.authorName[0]
                               : '?'),
                       border: Border.all(
                         color: const Color(0xFFE1E0FF),
@@ -62,14 +64,14 @@ class _PostDetailCardState extends State<PostDetailCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.post.authorName,
+                          post.authorName,
                           style: AppTextStyles.semiBold12.copyWith(
                             color: const Color(0xFF1B1B23),
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          widget.post.timeAgo,
+                          post.timeAgo,
                           style: AppTextStyles.regular14.copyWith(
                             color: const Color(0xFF5C5F61),
                           ),
@@ -81,20 +83,22 @@ class _PostDetailCardState extends State<PostDetailCard> {
               ],
             ),
           ),
-          if (widget.post.mainImageUrl != null &&
-              widget.post.mainImageUrl!.isNotEmpty)
+          if (post.mainImageUrl != null &&
+              post.mainImageUrl!.isNotEmpty)
             ClipRRect(
               child: AspectRatio(
                 aspectRatio: 356 / 194,
                 child: Image.network(
-                  widget.post.mainImageUrl!,
+                  post.mainImageUrl!,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
                     return Container(
                       color: const Color(0xFFEFECF8),
                       child: const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       ),
                     );
                   },
@@ -102,7 +106,10 @@ class _PostDetailCardState extends State<PostDetailCard> {
                     return Container(
                       color: const Color(0xFFEFECF8),
                       child: const Center(
-                        child: Icon(Icons.broken_image, color: Colors.grey),
+                        child: Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                        ),
                       ),
                     );
                   },
@@ -120,27 +127,23 @@ class _PostDetailCardState extends State<PostDetailCard> {
                     Row(
                       children: [
                         InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isLiked = !_isLiked;
-                            });
-                          },
+                          onTap: onLikePressed,
                           child: Row(
                             children: [
                               Icon(
-                                _isLiked
+                                post.isLiked
                                     ? Icons.favorite
                                     : Icons.favorite_border,
-                                color: _isLiked
+                                color: post.isLiked
                                     ? kBrandIndigo
                                     : kTextSecondaryColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                widget.post.likesCount.toString(),
+                                post.likesCount.toString(),
                                 style: AppTextStyles.medium12.copyWith(
-                                  color: _isLiked
+                                  color: post.isLiked
                                       ? kBrandIndigo
                                       : kTextSecondaryColor,
                                 ),
@@ -158,7 +161,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.post.commentsCount.toString(),
+                              post.commentsCount.toString(),
                               style: AppTextStyles.medium12.copyWith(
                                 color: kTextSecondaryColor,
                               ),
@@ -171,7 +174,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  widget.post.postContent,
+                  post.postContent,
                   style: AppTextStyles.regular16.copyWith(
                     color: kTextDarkColor,
                     height: 1.5,
@@ -185,5 +188,4 @@ class _PostDetailCardState extends State<PostDetailCard> {
       ),
     );
   }
-
 }
