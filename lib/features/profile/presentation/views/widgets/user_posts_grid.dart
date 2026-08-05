@@ -4,8 +4,15 @@ import '../../../../home/presentation/views/widgets/user_post_card.dart';
 
 class UserPostsGrid extends StatelessWidget {
   final List<PostModel> posts;
+  final ValueChanged<String>? onPostRemoved;
+  final Future<void> Function(PostModel post)? onPostDeleted;
 
-  const UserPostsGrid({super.key, required this.posts});
+  const UserPostsGrid({
+    super.key,
+    required this.posts,
+    this.onPostRemoved,
+    this.onPostDeleted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,7 @@ class UserPostsGrid extends StatelessWidget {
         child: Center(
           child: Text(
             'No posts yet',
-            style: TextStyle(
-              color: Color(0xFF5C5F61),
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Color(0xFF5C5F61), fontSize: 16),
           ),
         ),
       );
@@ -31,7 +35,11 @@ class UserPostsGrid extends StatelessWidget {
       itemCount: posts.length,
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
-        return UserPostCard(post: posts[index]);
+        return UserPostCard(
+          post: posts[index],
+          onPostRemoved: onPostRemoved,
+          onPostDeleted: onPostDeleted,
+        );
       },
     );
   }
