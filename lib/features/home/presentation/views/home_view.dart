@@ -23,6 +23,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _chatBodyKey = GlobalKey<ChatbotViewBodyState>();
   int _selectedIndex = 0;
   int _feedRefreshKey = 0;
 
@@ -48,7 +49,10 @@ class _HomeViewState extends State<HomeView> {
   PreferredSizeWidget _buildAppBar() {
     switch (_selectedIndex) {
       case 1:
-        return const ChatbotTopAppBar();
+        return ChatbotTopAppBar(
+          onClearChat: () =>
+              _chatBodyKey.currentState?.clearChat(),
+        );
       case 2:
         return ProfileTopAppBar(
           onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -71,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
         index: _selectedIndex,
         children: [
           HomeViewBody(key: ValueKey(_feedRefreshKey)),
-          const ChatbotViewBody(),
+          ChatbotViewBody(key: _chatBodyKey),
           const ProfileViewBody(),
         ],
       ),

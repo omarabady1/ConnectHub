@@ -12,20 +12,15 @@ class ChatbotViewBody extends StatefulWidget {
   const ChatbotViewBody({super.key});
 
   @override
-  State<ChatbotViewBody> createState() =>
-      ChatbotViewBodyState();
+  State<ChatbotViewBody> createState() => ChatbotViewBodyState();
 }
 
 class ChatbotViewBodyState extends State<ChatbotViewBody> {
-  final ScrollController _scrollController =
-      ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final List<ChatMessageModel> _messages = [];
-  final ChatbotApiService _apiService =
-      getIt<ChatbotApiService>();
-  final ChatStorageService _storageService =
-      getIt<ChatStorageService>();
-  final ChatService _chatService =
-      getIt<ChatService>();
+  final ChatbotApiService _apiService = getIt<ChatbotApiService>();
+  final ChatStorageService _storageService = getIt<ChatStorageService>();
+  final ChatService _chatService = getIt<ChatService>();
 
   late final String _sessionId;
   bool _isWaitingForReply = false;
@@ -42,8 +37,6 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
     _scrollController.dispose();
     super.dispose();
   }
-
-
 
   void _loadChatHistory() {
     final saved = _storageService.loadMessages(_sessionId);
@@ -69,27 +62,22 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
       );
     });
 
-    Future.delayed(
-      const Duration(milliseconds: 1000),
-      () {
-        if (!mounted) return;
-        setState(() {
-          _messages
-              .removeWhere((m) => m.id == 'welcome_loading');
-          _messages.add(
-            ChatMessageModel(
-              id: 'welcome_msg',
-              sender: ChatMessageSender.ai,
-              text:
-                  'Welcome back! How can I help you today?',
-              timestamp: DateTime.now(),
-            ),
-          );
-        });
-        _storageService.saveMessages(_sessionId, _messages);
-        _scrollToBottom();
-      },
-    );
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (!mounted) return;
+      setState(() {
+        _messages.removeWhere((m) => m.id == 'welcome_loading');
+        _messages.add(
+          ChatMessageModel(
+            id: 'welcome_msg',
+            sender: ChatMessageSender.ai,
+            text: 'Welcome back! How can I help you today?',
+            timestamp: DateTime.now(),
+          ),
+        );
+      });
+      _storageService.saveMessages(_sessionId, _messages);
+      _scrollToBottom();
+    });
   }
 
   void _scrollToBottom() {
@@ -114,8 +102,7 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
       timestamp: DateTime.now(),
     );
 
-    final loadingId =
-        '${DateTime.now().millisecondsSinceEpoch}_loading';
+    final loadingId = '${DateTime.now().millisecondsSinceEpoch}_loading';
 
     setState(() {
       _isWaitingForReply = true;
@@ -144,9 +131,7 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
         _messages.removeWhere((m) => m.id == loadingId);
         _messages.add(
           ChatMessageModel(
-            id: DateTime.now()
-                .millisecondsSinceEpoch
-                .toString(),
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
             sender: ChatMessageSender.ai,
             text: reply,
             timestamp: DateTime.now(),
@@ -161,9 +146,7 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
         _messages.removeWhere((m) => m.id == loadingId);
         _messages.add(
           ChatMessageModel(
-            id: DateTime.now()
-                .millisecondsSinceEpoch
-                .toString(),
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
             sender: ChatMessageSender.ai,
             text:
                 'Sorry, something went wrong. '
@@ -195,16 +178,13 @@ class ChatbotViewBodyState extends State<ChatbotViewBody> {
         Expanded(
           child: SingleChildScrollView(
             controller: _scrollController,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ChatbotWelcomeHeader(),
                 ..._messages.map((message) {
-                  return ChatMessageBubble(
-                    message: message,
-                  );
+                  return ChatMessageBubble(message: message);
                 }),
                 const SizedBox(height: 16),
               ],
