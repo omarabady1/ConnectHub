@@ -1,11 +1,7 @@
-import 'dart:convert';
-
-import 'package:connect_hub/constants.dart';
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
+import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
 import 'package:connect_hub/core/services/database_service.dart';
-import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/authentication/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../home/domain/models/post_model.dart';
 import 'profile_feed_tabs.dart';
@@ -28,15 +24,6 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     _userPostsFuture = _loadUserPosts();
   }
 
-  UserModel? _currentUser() {
-    final userJson = Prefs.getString(kUserData);
-    if (userJson == null || userJson.isEmpty) return null;
-
-    final decoded = jsonDecode(userJson);
-    if (decoded is! Map<String, dynamic>) return null;
-
-    return UserModel.fromJson(decoded);
-  }
 
   Future<List<PostModel>> _loadUserPosts() async {
     final postsData = await getIt<DatabaseService>().getData(
@@ -55,7 +42,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    final user = _currentUser();
+    final user = getCurrentUser();
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -72,6 +59,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             ProfileHeaderCard(
               name: user?.name ?? 'User',
               email: user?.email ?? '',
+              avatarUrl: user?.avatarUrl,
             ),
             const ProfileFeedTabs(),
             FutureBuilder<List<PostModel>>(

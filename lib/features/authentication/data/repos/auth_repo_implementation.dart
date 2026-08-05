@@ -17,10 +17,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthRepoImplementation implements AuthRepo {
   final FirebaseAuthService firebaseAuthService;
   final DatabaseService databaseService;
+
   AuthRepoImplementation({
     required this.firebaseAuthService,
     required this.databaseService,
   });
+
   @override
   Future<Either<Failure, UserEntity>> createUserWithEmailAndPassword(
     String email,
@@ -37,6 +39,7 @@ class AuthRepoImplementation implements AuthRepo {
         name: name,
         email: email,
         userID: user.uid,
+        avatarUrl: user.photoURL,
       );
       await addUser(user: userEntity);
       return right(userEntity);
@@ -97,17 +100,28 @@ class AuthRepoImplementation implements AuthRepo {
     try {
       user = await firebaseAuthService.signInWithGoogle();
       UserEntity userEntity = UserModel.fromFirebaseUser(user);
-      await saveUserData(user: userEntity);
       if (!await checkIfUserExists(user.uid)) {
         await addUser(user: userEntity);
       } else {
-        await getUserData(userID: user.uid);
+        final existingUser = await getUserData(userID: user.uid);
+        userEntity = UserModel(
+          name: existingUser.name.isNotEmpty ? existingUser.name : userEntity.name,
+          email: existingUser.email.isNotEmpty ? existingUser.email : userEntity.email,
+          userID: existingUser.userID,
+          avatarUrl: userEntity.avatarUrl ?? existingUser.avatarUrl,
+        );
+        if (existingUser.avatarUrl != userEntity.avatarUrl) {
+          await addUser(user: userEntity);
+        }
       }
+      await saveUserData(user: userEntity);
       return right(userEntity);
     } catch (e) {
       deleteUser(user);
       log('Exception in AuthRepoImplementation.signInWithGoogle: $e');
-      return left(ServerFailure('Unexpected Error Happened, Please Try Again Later'));
+      return left(
+        ServerFailure('Unexpected Error Happened, Please Try Again Later'),
+      );
     }
   }
 

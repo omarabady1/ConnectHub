@@ -6,11 +6,13 @@ import '../../../../../utils/app_text_styles.dart';
 class ProfileHeaderCard extends StatelessWidget {
   final String name;
   final String email;
+  final String? avatarUrl;
 
   const ProfileHeaderCard({
     super.key,
     required this.name,
     required this.email,
+    this.avatarUrl,
   });
 
   @override
@@ -43,6 +45,7 @@ class ProfileHeaderCard extends StatelessWidget {
               ],
             ),
             child: UserAvatar(
+              avatarUrl: avatarUrl,
               initial: name.isNotEmpty ? name[0] : '?',
               size: 120,
               border: Border.all(color: Colors.white, width: 4),

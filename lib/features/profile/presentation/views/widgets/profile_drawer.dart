@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:connect_hub/constants.dart';
+import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
 import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
-import 'package:connect_hub/features/authentication/data/models/user_model.dart';
 import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +9,6 @@ import '../../../../../utils/app_text_styles.dart';
 
 class ProfileDrawer extends StatelessWidget {
   const ProfileDrawer({super.key});
-
-  UserModel? _currentUser() {
-    final userJson = Prefs.getString(kUserData);
-    if (userJson == null || userJson.isEmpty) return null;
-
-    final decoded = jsonDecode(userJson);
-    if (decoded is! Map<String, dynamic>) return null;
-
-    return UserModel.fromJson(decoded);
-  }
 
   Future<void> _logout(BuildContext context) async {
     final confirmed = await showDialog<bool>(
@@ -56,7 +44,7 @@ class ProfileDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = _currentUser();
+    final user = getCurrentUser();
     final name = user?.name ?? 'User';
     final email = user?.email ?? '';
 
@@ -67,6 +55,7 @@ class ProfileDrawer extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             UserAvatar(
+              avatarUrl: user?.avatarUrl,
               initial: name.isNotEmpty ? name[0] : '?',
               size: 80,
               border: Border.all(color: kBrandIndigo, width: 2),

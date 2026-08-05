@@ -78,12 +78,14 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       final imageUrl = selectedImage == null
           ? null
           : await cloudStorageService.uploadFile(selectedImage, postId);
+      final user = _currentUser();
       final post = PostModel(
         id: postId,
-        userId: _currentUser()?.userID ?? '',
+        userId: user?.userID ?? '',
         authorName: _currentUserName(),
         authorRole: 'Member',
         timeAgo: DateTime.now().difference(DateTime.now()).inSeconds.toString(),
+        avatarUrl: user?.avatarUrl,
         avatarInitial: _currentUserInitial(),
         postTitle: trimmedTitle,
         postContent: trimmedContent,

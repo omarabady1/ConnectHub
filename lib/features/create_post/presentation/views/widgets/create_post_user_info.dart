@@ -1,72 +1,23 @@
+import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
+import 'package:connect_hub/core/utils/user_avatar.dart';
 import 'package:flutter/material.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class CreatePostUserInfo extends StatelessWidget {
-  final String userName;
-  final String? avatarUrl;
-
-  const CreatePostUserInfo({
-    super.key,
-    this.userName = 'Alex Rivers',
-    this.avatarUrl =
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
-  });
+  const CreatePostUserInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = getCurrentUser();
+    final name = user?.name ?? '';
+    final initial = name.isNotEmpty ? name[0] : 'A';
+
     return Row(
       children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFFE9E6F3),
-            border: Border.all(color: const Color(0x4DC7C4D7), width: 1),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x0D000000),
-                blurRadius: 2,
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: avatarUrl != null && avatarUrl!.isNotEmpty
-                ? Image.network(
-                    avatarUrl!,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, progress) {
-                      if (progress == null) return child;
-                      return const Center(
-                        child: SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Center(
-                        child: Text(
-                          userName.isNotEmpty ? userName[0] : 'A',
-                          style: AppTextStyles.medium16.copyWith(
-                            color: const Color(0xFF1B1B23),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : Center(
-                    child: Text(
-                      userName.isNotEmpty ? userName[0] : 'A',
-                      style: AppTextStyles.medium16.copyWith(
-                        color: const Color(0xFF1B1B23),
-                      ),
-                    ),
-                  ),
-          ),
+        UserAvatar(
+          avatarUrl: user?.avatarUrl,
+          initial: initial,
+          size: 40,
         ),
         const SizedBox(width: 12),
         Column(
@@ -74,7 +25,7 @@ class CreatePostUserInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              userName,
+              name,
               style: AppTextStyles.medium16.copyWith(
                 color: const Color(0xFF1B1B23),
               ),
