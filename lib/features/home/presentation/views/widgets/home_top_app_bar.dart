@@ -35,7 +35,6 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
             onPressed: onMenuPressed ?? () {},
@@ -45,21 +44,18 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
               size: 24,
             ),
           ),
-          Text(
-            'ConnectHub',
-            style: AppTextStyles.bold24.copyWith(
-              color: kBrandIndigo,
-              letterSpacing: -0.6,
+          Expanded(
+            child: Center(
+              child: Text(
+                'ConnectHub',
+                style: AppTextStyles.bold24.copyWith(
+                  color: kBrandIndigo,
+                  letterSpacing: -0.6,
+                ),
+              ),
             ),
           ),
-          IconButton(
-            onPressed: onNotificationsPressed ?? () {},
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: kTextDarkColor,
-              size: 24,
-            ),
-          ),
+          const SizedBox(width: 48),
         ],
       ),
     );
