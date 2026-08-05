@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
+import '../../../../../core/utils/user_avatar.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class PostCardHeader extends StatelessWidget {
@@ -26,7 +27,15 @@ class PostCardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _buildAvatar(),
+        UserAvatar(
+          avatarUrl: avatarUrl,
+          initial: avatarInitial ??
+              (authorName.isNotEmpty ? authorName[0] : '?'),
+          size: 44,
+          border: isCurrentUser
+              ? Border.all(color: kBrandIndigo, width: 2)
+              : null,
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -87,72 +96,6 @@ class PostCardHeader extends StatelessWidget {
           constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
         ),
       ],
-    );
-  }
-
-  Widget _buildAvatar() {
-    if (avatarUrl != null && avatarUrl!.isNotEmpty) {
-      return Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: isCurrentUser
-              ? Border.all(color: kBrandIndigo, width: 2)
-              : null,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(999),
-          child: Image.network(
-            avatarUrl!,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return Container(
-                color: const Color(0xFFE9E6F3),
-                child: const Center(
-                  child: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: const Color(0xFFE9E6F3),
-                child: Center(
-                  child: Text(
-                    authorName.isNotEmpty ? authorName[0] : '?',
-                    style: AppTextStyles.semiBold16,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: const Color(0xFF6C748B),
-        shape: BoxShape.circle,
-        border: isCurrentUser
-            ? Border.all(color: kBrandIndigo, width: 2)
-            : null,
-      ),
-      child: Center(
-        child: Text(
-          avatarInitial ?? (authorName.isNotEmpty ? authorName[0] : 'M'),
-          style: AppTextStyles.semiBold20.copyWith(
-            color: Colors.white,
-          ),
-        ),
-      ),
     );
   }
 }

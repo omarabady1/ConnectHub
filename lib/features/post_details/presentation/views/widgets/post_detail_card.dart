@@ -1,35 +1,12 @@
+import 'package:connect_hub/features/home/domain/models/post_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
+import '../../../../../core/utils/user_avatar.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class PostDetailCard extends StatefulWidget {
-  final String authorName;
-  final String timeAgo;
-  final String avatarUrl;
-  final String imageUrl;
-  final String caption;
-  final String likesCount;
-  final String commentsCount;
-  final List<Map<String, dynamic>> tags;
-
-  const PostDetailCard({
-    super.key,
-    this.authorName = 'User Name',
-    this.timeAgo = '2 hours ago',
-    this.avatarUrl =
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-    this.imageUrl =
-        'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800',
-    this.caption =
-        'This is a post about programming. It is a post about the importance of programming. It is a post about the impact of programming. It is a post about the future of programming.',
-    this.likesCount = '1.2k',
-    this.commentsCount = '342',
-    this.tags = const [
-      {'label': '#DesignLife', 'isPrimary': true},
-      {'label': '#MorningInspiration', 'isPrimary': true},
-      {'label': '#Minimalism', 'isPrimary': false},
-    ],
-  });
+  final PostModel post;
+  const PostDetailCard({super.key, required this.post});
 
   @override
   State<PostDetailCard> createState() => _PostDetailCardState();
@@ -69,22 +46,15 @@ class _PostDetailCardState extends State<PostDetailCard> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFE1E0FF),
-                          width: 2,
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(999),
-                        child: Image.network(
-                          widget.avatarUrl,
-                          fit: BoxFit.cover,
-                        ),
+                    UserAvatar(
+                      avatarUrl: widget.post.avatarUrl,
+                      initial: widget.post.avatarInitial ??
+                          (widget.post.authorName.isNotEmpty
+                              ? widget.post.authorName[0]
+                              : '?'),
+                      border: Border.all(
+                        color: const Color(0xFFE1E0FF),
+                        width: 2,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -92,14 +62,14 @@ class _PostDetailCardState extends State<PostDetailCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.authorName,
+                          widget.post.authorName,
                           style: AppTextStyles.semiBold12.copyWith(
                             color: const Color(0xFF1B1B23),
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          widget.timeAgo,
+                          widget.post.timeAgo,
                           style: AppTextStyles.regular14.copyWith(
                             color: const Color(0xFF5C5F61),
                           ),
@@ -111,24 +81,34 @@ class _PostDetailCardState extends State<PostDetailCard> {
               ],
             ),
           ),
-          ClipRRect(
-            child: AspectRatio(
-              aspectRatio: 356 / 194,
-              child: Image.network(
-                widget.imageUrl,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Container(
-                    color: const Color(0xFFEFECF8),
-                    child: const Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  );
-                },
+          if (widget.post.mainImageUrl != null &&
+              widget.post.mainImageUrl!.isNotEmpty)
+            ClipRRect(
+              child: AspectRatio(
+                aspectRatio: 356 / 194,
+                child: Image.network(
+                  widget.post.mainImageUrl!,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return Container(
+                      color: const Color(0xFFEFECF8),
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: const Color(0xFFEFECF8),
+                      child: const Center(
+                        child: Icon(Icons.broken_image, color: Colors.grey),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -158,7 +138,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                widget.likesCount,
+                                widget.post.likesCount.toString(),
                                 style: AppTextStyles.medium12.copyWith(
                                   color: _isLiked
                                       ? kBrandIndigo
@@ -178,7 +158,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.commentsCount,
+                              widget.post.commentsCount.toString(),
                               style: AppTextStyles.medium12.copyWith(
                                 color: kTextSecondaryColor,
                               ),
@@ -191,7 +171,7 @@ class _PostDetailCardState extends State<PostDetailCard> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  widget.caption,
+                  widget.post.postContent,
                   style: AppTextStyles.regular16.copyWith(
                     color: kTextDarkColor,
                     height: 1.5,
@@ -205,4 +185,5 @@ class _PostDetailCardState extends State<PostDetailCard> {
       ),
     );
   }
+
 }

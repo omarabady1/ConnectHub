@@ -16,7 +16,7 @@ class RegularPostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(PostDetailsView.routeName);
+        Navigator.of(context).pushNamed(PostDetailsView.routeName, arguments: post);
       },
       child: Container(
         width: double.infinity,
