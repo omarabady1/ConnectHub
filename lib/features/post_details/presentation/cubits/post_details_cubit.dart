@@ -36,11 +36,13 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
       final comments = results[0] as List<CommentModel>;
       final likedByUsers = results[1] as List<Map<String, String>>;
 
-      emit(PostDetailsSuccess(
-        post: state.post,
-        comments: comments,
-        likedByUsers: likedByUsers,
-      ));
+      emit(
+        PostDetailsSuccess(
+          post: state.post,
+          comments: comments,
+          likedByUsers: likedByUsers,
+        ),
+      );
     } catch (e, s) {
       developer.log(
         'Failed to load post details',
@@ -48,19 +50,23 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
         error: e,
         stackTrace: s,
       );
-      emit(PostDetailsFailure(
-        post: state.post,
-        errorMessage: 'Failed to load post details',
-      ));
+      emit(
+        PostDetailsFailure(
+          post: state.post,
+          errorMessage: 'Failed to load post details',
+        ),
+      );
     }
   }
 
   Future<void> refresh() async {
     try {
-      final postData = await _databaseService.getData(
-        path: BackendEndpoints.posts,
-        docId: state.post.id,
-      ) as Map<String, dynamic>?;
+      final postData =
+          await _databaseService.getData(
+                path: BackendEndpoints.posts,
+                docId: state.post.id,
+              )
+              as Map<String, dynamic>?;
 
       PostModel updatedPost = state.post;
       if (postData != null) {
@@ -75,21 +81,27 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
       final comments = results[0] as List<CommentModel>;
       final likedByUsers = results[1] as List<Map<String, String>>;
 
-      emit(PostDetailsSuccess(
-        post: updatedPost,
-        comments: comments,
-        likedByUsers: likedByUsers,
-      ));
+      emit(
+        PostDetailsSuccess(
+          post: updatedPost,
+          comments: comments,
+          likedByUsers: likedByUsers,
+        ),
+      );
     } catch (e) {
       if (state is PostDetailsSuccess) {
-        emit((state as PostDetailsSuccess).copyWith(
-          errorMessage: 'Failed to refresh.',
-        ));
+        emit(
+          (state as PostDetailsSuccess).copyWith(
+            errorMessage: 'Failed to refresh.',
+          ),
+        );
       }
     }
   }
 
-  Future<List<Map<String, String>>> _fetchLikedByUsers({List<String>? likedByOverride}) async {
+  Future<List<Map<String, String>>> _fetchLikedByUsers({
+    List<String>? likedByOverride,
+  }) async {
     final likedBy = likedByOverride ?? state.post.likedBy;
     if (likedBy.isEmpty) return [];
 
@@ -131,14 +143,16 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
       newLikedBy.add(userId);
     }
 
-    emit(currentState.copyWith(
-      post: currentState.post.copyWith(
-        isLiked: !wasLiked,
-        likesCount: oldCount + (wasLiked ? -1 : 1),
-        likedBy: newLikedBy,
+    emit(
+      currentState.copyWith(
+        post: currentState.post.copyWith(
+          isLiked: !wasLiked,
+          likesCount: oldCount + (wasLiked ? -1 : 1),
+          likedBy: newLikedBy,
+        ),
+        clearErrorMessage: true,
       ),
-      clearErrorMessage: true,
-    ));
+    );
 
     try {
       await _interactionService.toggleLike(
@@ -155,15 +169,43 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
       );
       if (state is PostDetailsSuccess) {
         final st = state as PostDetailsSuccess;
-        emit(st.copyWith(
-          post: st.post.copyWith(
-            isLiked: wasLiked,
-            likesCount: oldCount,
-            likedBy: oldLikedBy,
+        emit(
+          st.copyWith(
+            post: st.post.copyWith(
+              isLiked: wasLiked,
+              likesCount: oldCount,
+              likedBy: oldLikedBy,
+            ),
+            errorMessage: 'Could not update like. Try again.',
           ),
-          errorMessage: 'Could not update like. Try again.',
-        ));
+        );
       }
+    }
+  }
+
+  Future<void> deletePost() async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    final post = state.post;
+
+    if (currentUserId == null ||
+        post.userId.isEmpty ||
+        post.userId != currentUserId) {
+      throw StateError('You can only delete posts you created.');
+    }
+
+    try {
+      await _databaseService.deleteData(
+        path: BackendEndpoints.posts,
+        docId: post.id,
+      );
+    } catch (e, s) {
+      developer.log(
+        'Failed to delete post ${post.id}',
+        name: 'PostDetailsCubit',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
     }
   }
 
@@ -188,14 +230,16 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
     );
 
     final updatedComments = [comment, ...currentState.comments];
-    emit(currentState.copyWith(
-      comments: updatedComments,
-      isSendingComment: true,
-      post: currentState.post.copyWith(
-        commentsCount: currentState.post.commentsCount + 1,
+    emit(
+      currentState.copyWith(
+        comments: updatedComments,
+        isSendingComment: true,
+        post: currentState.post.copyWith(
+          commentsCount: currentState.post.commentsCount + 1,
+        ),
+        clearErrorMessage: true,
       ),
-      clearErrorMessage: true,
-    ));
+    );
 
     try {
       await _interactionService.addComment(
@@ -214,14 +258,14 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
       );
       if (state is PostDetailsSuccess) {
         final st = state as PostDetailsSuccess;
-        emit(st.copyWith(
-          comments: st.comments.where((c) => c.id != comment.id).toList(),
-          isSendingComment: false,
-          post: st.post.copyWith(
-            commentsCount: st.post.commentsCount - 1,
+        emit(
+          st.copyWith(
+            comments: st.comments.where((c) => c.id != comment.id).toList(),
+            isSendingComment: false,
+            post: st.post.copyWith(commentsCount: st.post.commentsCount - 1),
+            errorMessage: 'Could not add comment. Try again.',
           ),
-          errorMessage: 'Could not add comment. Try again.',
-        ));
+        );
       }
     }
   }

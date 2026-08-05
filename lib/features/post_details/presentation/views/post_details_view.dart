@@ -25,14 +25,19 @@ class PostDetailsView extends StatelessWidget {
     return BlocProvider(
       create: (_) => PostDetailsCubit(
         post: post,
-        interactionService:
-            getIt<PostInteractionService>(),
+        interactionService: getIt<PostInteractionService>(),
         databaseService: getIt<DatabaseService>(),
         authRepo: getIt<AuthRepo>(),
       )..loadInitialData(),
       child: const _PostDetailsScaffold(),
     );
   }
+}
+
+class PostDetailsDeletedResult {
+  const PostDetailsDeletedResult({required this.postId});
+
+  final String postId;
 }
 
 class _PostDetailsScaffold extends StatelessWidget {
@@ -44,13 +49,12 @@ class _PostDetailsScaffold extends StatelessWidget {
 
     return BlocListener<PostDetailsCubit, PostDetailsState>(
       listenWhen: (prev, curr) =>
-          curr.errorMessage != null &&
-          curr.errorMessage != prev.errorMessage,
+          curr.errorMessage != null && curr.errorMessage != prev.errorMessage,
       listener: (context, state) {
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
         }
       },
       child: PopScope(
@@ -75,9 +79,14 @@ class _PostDetailsScaffold extends StatelessWidget {
                     return PostDetailsViewBody(
                       post: state.post,
                       comments: state.comments,
-                      isLoadingComments: state is PostDetailsLoading || state is PostDetailsInitial,
+                      isLoadingComments:
+                          state is PostDetailsLoading ||
+                          state is PostDetailsInitial,
                       likedByUsers: state.likedByUsers,
                       onLikePressed: cubit.toggleLike,
+                      onDeletePressed: state.post.isCurrentUser
+                          ? () => _confirmDeletePost(context, cubit)
+                          : null,
                       onRefresh: cubit.refresh,
                     );
                   },
@@ -108,5 +117,49 @@ class _PostDetailsScaffold extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _confirmDeletePost(
+    BuildContext context,
+    PostDetailsCubit cubit,
+  ) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete post?'),
+        content: const Text('This post will be removed from your feed.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFFD92D20),
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true || !context.mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final postId = cubit.state.post.id;
+
+    try {
+      await cubit.deletePost();
+      if (!context.mounted) return;
+
+      Navigator.of(context).pop(PostDetailsDeletedResult(postId: postId));
+    } catch (_) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Could not delete this post. Please try again.'),
+        ),
+      );
+    }
   }
 }

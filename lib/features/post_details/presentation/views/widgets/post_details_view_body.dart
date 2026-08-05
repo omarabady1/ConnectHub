@@ -12,6 +12,7 @@ class PostDetailsViewBody extends StatelessWidget {
   final bool isLoadingComments;
   final List<Map<String, String>> likedByUsers;
   final VoidCallback? onLikePressed;
+  final VoidCallback? onDeletePressed;
   final Future<void> Function()? onRefresh;
 
   const PostDetailsViewBody({
@@ -21,6 +22,7 @@ class PostDetailsViewBody extends StatelessWidget {
     this.isLoadingComments = false,
     this.likedByUsers = const [],
     this.onLikePressed,
+    this.onDeletePressed,
     this.onRefresh,
   });
 
@@ -35,25 +37,26 @@ class PostDetailsViewBody extends StatelessWidget {
           child: ListView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.all(16),
-        children: [
-          PostDetailCard(
-            post: post,
-            onLikePressed: onLikePressed,
+            children: [
+              PostDetailCard(
+                post: post,
+                onLikePressed: onLikePressed,
+                onDeletePressed: onDeletePressed,
+              ),
+              const SizedBox(height: 24),
+              LikedBySection(likedByUsers: likedByUsers),
+              const SizedBox(height: 24),
+              CommentsSection(
+                totalComments: isLoadingComments
+                    ? post.commentsCount
+                    : comments.length,
+                comments: comments,
+                isLoading: isLoadingComments,
+              ),
+              const SizedBox(height: 24),
+            ],
           ),
-          const SizedBox(height: 24),
-          LikedBySection(likedByUsers: likedByUsers),
-          const SizedBox(height: 24),
-          CommentsSection(
-            totalComments: isLoadingComments
-                ? post.commentsCount
-                : comments.length,
-            comments: comments,
-            isLoading: isLoadingComments,
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
-      ),
+        ),
       ),
     );
   }

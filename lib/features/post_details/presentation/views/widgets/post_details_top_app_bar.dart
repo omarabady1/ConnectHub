@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
 
-/// Top App Bar for Post Details screen matching Figma node 1:208.
-class PostDetailsTopAppBar extends StatelessWidget implements PreferredSizeWidget {
+class PostDetailsTopAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final VoidCallback? onBackPressed;
-  final VoidCallback? onMorePressed;
 
-  const PostDetailsTopAppBar({
-    super.key,
-    this.onBackPressed,
-    this.onMorePressed,
-  });
+  const PostDetailsTopAppBar({super.key, this.onBackPressed});
 
   @override
   Size get preferredSize => const Size.fromHeight(64);
@@ -53,14 +48,7 @@ class PostDetailsTopAppBar extends StatelessWidget implements PreferredSizeWidge
               letterSpacing: -0.6,
             ),
           ),
-          IconButton(
-            onPressed: onMorePressed ?? () {},
-            icon: const Icon(
-              Icons.more_vert_rounded,
-              color: kTextDarkColor,
-              size: 24,
-            ),
-          ),
+          const SizedBox(width: 48),
         ],
       ),
     );

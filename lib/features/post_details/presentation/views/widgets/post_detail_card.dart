@@ -7,11 +7,13 @@ import '../../../../../utils/app_text_styles.dart';
 class PostDetailCard extends StatelessWidget {
   final PostModel post;
   final VoidCallback? onLikePressed;
+  final VoidCallback? onDeletePressed;
 
   const PostDetailCard({
     super.key,
     required this.post,
     this.onLikePressed,
+    this.onDeletePressed,
   });
 
   @override
@@ -37,54 +39,101 @@ class PostDetailCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: Color(0xFFE4E1ED),
-                  width: 1,
-                ),
+                bottom: BorderSide(color: Color(0xFFE4E1ED), width: 1),
               ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    UserAvatar(
-                      avatarUrl: post.avatarUrl,
-                      initial: post.avatarInitial ??
-                          (post.authorName.isNotEmpty
-                              ? post.authorName[0]
-                              : '?'),
-                      border: Border.all(
-                        color: const Color(0xFFE1E0FF),
-                        width: 2,
+                Expanded(
+                  child: Row(
+                    children: [
+                      UserAvatar(
+                        avatarUrl: post.avatarUrl,
+                        initial:
+                            post.avatarInitial ??
+                            (post.authorName.isNotEmpty
+                                ? post.authorName[0]
+                                : '?'),
+                        border: Border.all(
+                          color: const Color(0xFFE1E0FF),
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          post.authorName,
-                          style: AppTextStyles.semiBold12.copyWith(
-                            color: const Color(0xFF1B1B23),
-                          ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              post.authorName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.semiBold12.copyWith(
+                                color: const Color(0xFF1B1B23),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              post.timeAgo,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.regular14.copyWith(
+                                color: const Color(0xFF5C5F61),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          post.timeAgo,
-                          style: AppTextStyles.regular14.copyWith(
-                            color: const Color(0xFF5C5F61),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
+                if (onDeletePressed != null) ...[
+                  const SizedBox(width: 8),
+                  PopupMenuButton<_PostDetailAction>(
+                    onSelected: (action) {
+                      switch (action) {
+                        case _PostDetailAction.delete:
+                          onDeletePressed?.call();
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem<_PostDetailAction>(
+                        value: _PostDetailAction.delete,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.delete_outline_rounded,
+                              color: Color(0xFFD92D20),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Delete post',
+                              style: AppTextStyles.medium12.copyWith(
+                                color: const Color(0xFFD92D20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    icon: const Icon(
+                      Icons.more_horiz,
+                      color: kTextSecondaryColor,
+                      size: 20,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-          if (post.mainImageUrl != null &&
-              post.mainImageUrl!.isNotEmpty)
+          if (post.mainImageUrl != null && post.mainImageUrl!.isNotEmpty)
             ClipRRect(
               child: AspectRatio(
                 aspectRatio: 356 / 194,
@@ -96,9 +145,7 @@ class PostDetailCard extends StatelessWidget {
                     return Container(
                       color: const Color(0xFFEFECF8),
                       child: const Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                     );
                   },
@@ -106,10 +153,7 @@ class PostDetailCard extends StatelessWidget {
                     return Container(
                       color: const Color(0xFFEFECF8),
                       child: const Center(
-                        child: Icon(
-                          Icons.broken_image,
-                          color: Colors.grey,
-                        ),
+                        child: Icon(Icons.broken_image, color: Colors.grey),
                       ),
                     );
                   },
@@ -189,3 +233,5 @@ class PostDetailCard extends StatelessWidget {
     );
   }
 }
+
+enum _PostDetailAction { delete }
