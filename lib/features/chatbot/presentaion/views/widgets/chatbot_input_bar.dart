@@ -64,7 +64,7 @@ class _ChatbotInputBarState extends State<ChatbotInputBar> {
                   color: const Color(0xFF1B1B23),
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Ask Nexus AI...',
+                  hintText: 'Ask ConnectHub AI...',
                   hintStyle: AppTextStyles.regular14.copyWith(
                     color: const Color(0x99464554),
                   ),
