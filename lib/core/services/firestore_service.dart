@@ -18,6 +18,15 @@ class FirestoreService implements DatabaseService {
   }
 
   @override
+  Future<void> updateData({
+    required String path,
+    required String docId,
+    required Map<String, dynamic> data,
+  }) async {
+    await firestore.collection(path).doc(docId).update(data);
+  }
+
+  @override
   Future<bool> checkIfValueExists(
     String collection,
     String field,
@@ -58,4 +67,52 @@ class FirestoreService implements DatabaseService {
       return result.docs.map((e) => e.data()).toList();
     }
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> getSubCollectionData({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+    Map<String, dynamic>? query,
+  }) async {
+    Query<Map<String, dynamic>> ref = firestore
+        .collection(parentPath)
+        .doc(parentDocId)
+        .collection(subCollection);
+
+    if (query != null) {
+      if (query['orderBy'] != null) {
+        final orderByField = query['orderBy'];
+        final descending = query['descending'] ?? false;
+        ref = ref.orderBy(orderByField, descending: descending);
+      }
+      if (query['limit'] != null) {
+        ref = ref.limit(query['limit']);
+      }
+    }
+
+    final snapshot = await ref.get();
+    return snapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  @override
+  Future<void> addSubCollectionData({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+    required Map<String, dynamic> data,
+    String? docId,
+  }) async {
+    final ref = firestore
+        .collection(parentPath)
+        .doc(parentDocId)
+        .collection(subCollection);
+
+    if (docId != null) {
+      await ref.doc(docId).set(data);
+    } else {
+      await ref.add(data);
+    }
+  }
 }
+
