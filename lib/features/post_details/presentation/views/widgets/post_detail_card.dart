@@ -136,7 +136,7 @@ class PostDetailCard extends StatelessWidget {
           if (post.mainImageUrl != null && post.mainImageUrl!.isNotEmpty)
             ClipRRect(
               child: AspectRatio(
-                aspectRatio: 356 / 194,
+                aspectRatio: 9 / 16,
                 child: Image.network(
                   post.mainImageUrl!,
                   fit: BoxFit.cover,

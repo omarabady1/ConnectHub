@@ -36,7 +36,7 @@ class _PostImageState extends State<PostImage> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: AspectRatio(
-        aspectRatio: 326 / 178,
+        aspectRatio: 4 / 3,
         child: Image(
           image: _imageProvider,
           fit: BoxFit.cover,

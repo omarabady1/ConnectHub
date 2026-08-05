@@ -20,23 +20,19 @@ class CreatePostImagePreview extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Image.file(
-              image,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: const Color(0xFFE9E6F3),
-                  child: const Center(
-                    child: Icon(
-                      Icons.image_not_supported_outlined,
-                      color: kTextSecondaryColor,
-                    ),
+          child: Image.file(
+            image,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: const Color(0xFFE9E6F3),
+                child: const Center(
+                  child: Icon(
+                    Icons.image_not_supported_outlined,
+                    color: kTextSecondaryColor,
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
         Positioned(

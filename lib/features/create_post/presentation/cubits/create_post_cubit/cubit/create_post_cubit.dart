@@ -29,7 +29,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     try {
       final pickedImage = await _imagePicker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 85,
+        imageQuality: 35,
+        maxWidth: 1280,
+        maxHeight: 1280,
       );
 
       if (pickedImage == null) return;
