@@ -15,6 +15,7 @@ class PostModel {
   final int likesCount;
   final int commentsCount;
   final bool isLiked;
+  final List<String> likedBy;
 
   const PostModel({
     required this.id,
@@ -31,12 +32,42 @@ class PostModel {
     required this.likesCount,
     required this.commentsCount,
     this.isLiked = false,
+    this.likedBy = const [],
   });
+
+  PostModel copyWith({
+    int? likesCount,
+    int? commentsCount,
+    bool? isLiked,
+    List<String>? likedBy,
+  }) {
+    return PostModel(
+      id: id,
+      userId: userId,
+      authorName: authorName,
+      authorRole: authorRole,
+      timeAgo: timeAgo,
+      avatarUrl: avatarUrl,
+      avatarInitial: avatarInitial,
+      isCurrentUser: isCurrentUser,
+      postTitle: postTitle,
+      postContent: postContent,
+      mainImageUrl: mainImageUrl,
+      likesCount: likesCount ?? this.likesCount,
+      commentsCount: commentsCount ?? this.commentsCount,
+      isLiked: isLiked ?? this.isLiked,
+      likedBy: likedBy ?? this.likedBy,
+    );
+  }
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     final createdAt = _stringValue(map['createdAt']);
     final postUserId = _stringValue(map['userId']);
     final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final likedByRaw = (map['likedBy'] as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        [];
 
     return PostModel(
       id: _stringValue(map['id']),
@@ -55,7 +86,8 @@ class PostModel {
       ),
       likesCount: _intValue(map['likesCount']),
       commentsCount: _intValue(map['commentsCount']),
-      isLiked: _boolValue(map['isLiked']),
+      likedBy: likedByRaw,
+      isLiked: likedByRaw.contains(currentUid),
     );
   }
 
@@ -75,7 +107,7 @@ class PostModel {
       'imageUrl': mainImageUrl,
       'likesCount': likesCount,
       'commentsCount': commentsCount,
-      'isLiked': isLiked,
+      'likedBy': likedBy,
     };
   }
 
@@ -96,7 +128,6 @@ class PostModel {
     return 0;
   }
 
-  static bool _boolValue(Object? value) => value is bool && value;
 
   static String _timeAgoFrom(String createdAt) {
     final createdDate = DateTime.tryParse(createdAt);
