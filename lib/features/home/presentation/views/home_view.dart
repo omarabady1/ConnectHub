@@ -3,6 +3,7 @@ import '../../../../constants.dart';
 import '../../../chatbot/presentaion/views/widgets/chatbot_top_app_bar.dart';
 import '../../../chatbot/presentaion/views/widgets/chatbot_view_body.dart';
 import '../../../create_post/presentation/views/create_post_view.dart';
+import '../../../profile/presentation/views/widgets/profile_drawer.dart';
 import '../../../profile/presentation/views/widgets/profile_top_app_bar.dart';
 import '../../../profile/presentation/views/widgets/profile_view_body.dart';
 import 'widgets/create_post_add_button.dart';
@@ -21,6 +22,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   int _feedRefreshKey = 0;
 
@@ -48,17 +50,23 @@ class _HomeViewState extends State<HomeView> {
       case 1:
         return const ChatbotTopAppBar();
       case 2:
-        return const ProfileTopAppBar();
+        return ProfileTopAppBar(
+          onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        );
       default:
-        return const HomeTopAppBar();
+        return HomeTopAppBar(
+          onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: kHomeBackgroundColor,
       appBar: _buildAppBar(),
+      drawer: const ProfileDrawer(),
       body: IndexedStack(
         index: _selectedIndex,
         children: [
