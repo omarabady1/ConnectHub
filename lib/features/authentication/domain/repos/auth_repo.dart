@@ -15,6 +15,7 @@ abstract class AuthRepo {
   Future<Either<Failure, UserEntity>> signInWithGoogle();
   Future addUser({required UserEntity user});
   Future saveUserData({required UserEntity user});
+  UserEntity? getCachedUser();
   Future<bool> checkIfUserExists(String value);
   Future<UserEntity> getUserData({required String userID});
 }

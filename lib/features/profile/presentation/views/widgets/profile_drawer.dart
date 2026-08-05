@@ -1,6 +1,7 @@
 import 'package:connect_hub/constants.dart';
-import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
+import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class ProfileDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = getCurrentUser();
+    final user = getIt<AuthRepo>().getCachedUser();
     final name = user?.name ?? 'User';
     final email = user?.email ?? '';
 

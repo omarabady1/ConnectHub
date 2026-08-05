@@ -1,12 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:connect_hub/constants.dart';
 import 'package:connect_hub/core/services/cloud_storage_service.dart';
 import 'package:connect_hub/core/services/database_service.dart';
-import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/authentication/data/models/user_model.dart';
+import 'package:connect_hub/features/authentication/domain/entities/user_entity.dart';
+import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/home/domain/models/post_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,12 +15,14 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   CreatePostCubit({
     required this.databaseService,
     required this.cloudStorageService,
+    required this.authRepo,
     ImagePicker? imagePicker,
   }) : _imagePicker = imagePicker ?? ImagePicker(),
        super(const CreatePostInitial());
 
   final DatabaseService databaseService;
   final CloudStorageService cloudStorageService;
+  final AuthRepo authRepo;
   final ImagePicker _imagePicker;
 
   Future<void> pickImage() async {
@@ -79,14 +79,15 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           ? null
           : await cloudStorageService.uploadFile(selectedImage, postId);
       final user = _currentUser();
+      final authorName = _currentUserName(user);
       final post = PostModel(
         id: postId,
         userId: user?.userID ?? '',
-        authorName: _currentUserName(),
+        authorName: authorName,
         authorRole: 'Member',
         timeAgo: DateTime.now().difference(DateTime.now()).inSeconds.toString(),
         avatarUrl: user?.avatarUrl,
-        avatarInitial: _currentUserInitial(),
+        avatarInitial: _currentUserInitial(authorName),
         postTitle: trimmedTitle,
         postContent: trimmedContent,
         mainImageUrl: imageUrl,
@@ -115,25 +116,15 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     }
   }
 
-  UserModel? _currentUser() {
-    final userJson = Prefs.getString(kUserData);
-    if (userJson == null || userJson.isEmpty) return null;
+  UserEntity? _currentUser() => authRepo.getCachedUser();
 
-    final decodedUser = jsonDecode(userJson);
-    if (decodedUser is! Map<String, dynamic>) return null;
-
-    return UserModel.fromJson(decodedUser);
-  }
-
-  String _currentUserName() {
-    final user = _currentUser();
+  String _currentUserName(UserEntity? user) {
     if (user == null || user.name.trim().isEmpty) return 'Anonymous';
 
     return user.name;
   }
 
-  String _currentUserInitial() {
-    final userName = _currentUserName();
+  String _currentUserInitial(String userName) {
     return userName.isEmpty ? 'A' : userName[0].toUpperCase();
   }
 }

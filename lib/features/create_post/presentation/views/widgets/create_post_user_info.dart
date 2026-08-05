@@ -1,5 +1,6 @@
-import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/utils/user_avatar.dart';
+import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:flutter/material.dart';
 import '../../../../../utils/app_text_styles.dart';
 
@@ -8,7 +9,7 @@ class CreatePostUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = getCurrentUser();
+    final user = getIt<AuthRepo>().getCachedUser();
     final name = user?.name ?? '';
     final initial = name.isNotEmpty ? name[0] : 'A';
 

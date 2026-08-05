@@ -1,6 +1,7 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/services/cloud_storage_service.dart';
 import 'package:connect_hub/core/services/database_service.dart';
+import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/create_post/presentation/cubits/create_post_cubit/cubit/create_post_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,7 @@ class _CreatePostViewState extends State<CreatePostView> {
       create: (context) => CreatePostCubit(
         databaseService: getIt<DatabaseService>(),
         cloudStorageService: getIt<CloudStorageService>(),
+        authRepo: getIt<AuthRepo>(),
       ),
       child: BlocConsumer<CreatePostCubit, CreatePostState>(
         listener: (context, state) {

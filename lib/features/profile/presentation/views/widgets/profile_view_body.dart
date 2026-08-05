@@ -1,7 +1,7 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/core/helper_functions.dart/get_current_user.dart';
 import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
+import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:flutter/material.dart';
 import '../../../../home/domain/models/post_model.dart';
 import 'profile_feed_tabs.dart';
@@ -24,7 +24,6 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     _userPostsFuture = _loadUserPosts();
   }
 
-
   Future<List<PostModel>> _loadUserPosts() async {
     final postsData = await getIt<DatabaseService>().getData(
       path: BackendEndpoints.posts,
@@ -42,7 +41,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    final user = getCurrentUser();
+    final user = getIt<AuthRepo>().getCachedUser();
 
     return RefreshIndicator(
       onRefresh: () async {

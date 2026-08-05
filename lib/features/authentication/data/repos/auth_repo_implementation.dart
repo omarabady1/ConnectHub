@@ -105,8 +105,12 @@ class AuthRepoImplementation implements AuthRepo {
       } else {
         final existingUser = await getUserData(userID: user.uid);
         userEntity = UserModel(
-          name: existingUser.name.isNotEmpty ? existingUser.name : userEntity.name,
-          email: existingUser.email.isNotEmpty ? existingUser.email : userEntity.email,
+          name: existingUser.name.isNotEmpty
+              ? existingUser.name
+              : userEntity.name,
+          email: existingUser.email.isNotEmpty
+              ? existingUser.email
+              : userEntity.email,
           userID: existingUser.userID,
           avatarUrl: userEntity.avatarUrl ?? existingUser.avatarUrl,
         );
@@ -138,6 +142,17 @@ class AuthRepoImplementation implements AuthRepo {
   Future<dynamic> saveUserData({required UserEntity user}) async {
     var jsonData = UserModel.fromEntity(user).toMap();
     Prefs.setString(kUserData, jsonEncode(jsonData));
+  }
+
+  @override
+  UserEntity? getCachedUser() {
+    final userJson = Prefs.getString(kUserData);
+    if (userJson == null || userJson.isEmpty) return null;
+
+    final decodedUser = jsonDecode(userJson);
+    if (decodedUser is! Map<String, dynamic>) return null;
+
+    return UserModel.fromJson(decodedUser);
   }
 
   @override
