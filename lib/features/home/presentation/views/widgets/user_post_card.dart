@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
+import '../../../../../utils/snack_bar_utils.dart';
 import '../../../domain/models/post_model.dart';
 import 'post_card_actions.dart';
 import 'post_card_header.dart';
@@ -42,9 +43,11 @@ class UserPostCard extends StatelessWidget {
           onPostRemoved?.call(updatedPost.postId);
           if (!context.mounted) return;
 
-          ScaffoldMessenger.of(
+          showCustomSnackBar(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Post deleted.')));
+            'Post deleted.',
+            isError: false,
+          );
         }
       },
       child: Container(
@@ -132,16 +135,18 @@ class UserPostCard extends StatelessWidget {
 
     if (shouldDelete != true || !context.mounted) return;
 
-    final messenger = ScaffoldMessenger.of(context);
     try {
       await onPostDeleted?.call(post);
 
-      messenger.showSnackBar(const SnackBar(content: Text('Post deleted.')));
+      showCustomSnackBar(
+        context,
+        'Post deleted.',
+        isError: false,
+      );
     } catch (_) {
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Could not delete this post. Please try again.'),
-        ),
+      showCustomSnackBar(
+        context,
+        'Could not delete this post. Please try again.',
       );
     }
   }

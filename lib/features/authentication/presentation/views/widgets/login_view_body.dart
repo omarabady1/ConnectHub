@@ -6,6 +6,7 @@ import 'package:connect_hub/features/authentication/presentation/views/widgets/s
 import 'package:connect_hub/features/home/presentation/views/home_view.dart';
 import 'package:connect_hub/generated/assets.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
+import 'package:connect_hub/utils/snack_bar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,9 +34,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password.')),
-      );
+      showCustomSnackBar(context, 'Please enter email and password.',);
       return;
     }
 
@@ -47,14 +46,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          ScaffoldMessenger.of(
+          showCustomSnackBar(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+            state.errMessage,
+          );
         }
         if (state is LoginSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Login successful.')));
           Navigator.pushReplacementNamed(context, HomeView.routeName);
         }
       },

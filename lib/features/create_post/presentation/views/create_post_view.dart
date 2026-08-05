@@ -3,6 +3,7 @@ import 'package:connect_hub/core/services/cloud_storage_service.dart';
 import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/create_post/presentation/cubits/create_post_cubit/cubit/create_post_cubit.dart';
+import 'package:connect_hub/utils/snack_bar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/create_post_top_app_bar.dart';
@@ -53,16 +54,19 @@ class _CreatePostViewState extends State<CreatePostView> {
       child: BlocConsumer<CreatePostCubit, CreatePostState>(
         listener: (context, state) {
           if (state is CreatePostSuccess && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Post created successfully.')),
+            showCustomSnackBar(
+              context,
+              'Post created successfully.',
+              isError: false,
             );
             Navigator.of(context).pop(true);
           }
 
           if (state is CreatePostError) {
-            ScaffoldMessenger.of(
+            showCustomSnackBar(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+              state.errMessage,
+            );
           }
         },
         builder: (context, state) {

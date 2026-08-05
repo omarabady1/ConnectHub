@@ -5,6 +5,7 @@ import 'package:connect_hub/features/authentication/presentation/views/widgets/a
 import 'package:connect_hub/features/authentication/presentation/views/widgets/social_button.dart';
 import 'package:connect_hub/generated/assets.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
+import 'package:connect_hub/utils/snack_bar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -35,17 +36,17 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     final password = _passwordController.text;
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields.')),
+      showCustomSnackBar(
+        context,
+        'Please fill in all fields.',
       );
       return;
     }
 
     if (password.length < 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 8 characters.'),
-        ),
+      showCustomSnackBar(
+        context,
+        'Password must be at least 8 characters.',
       );
       return;
     }
@@ -62,14 +63,17 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     return BlocConsumer<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpFailure) {
-          ScaffoldMessenger.of(
+          showCustomSnackBar(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+            state.errMessage,
+          );
         }
 
         if (state is SignUpSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Account created successfully.')),
+          showCustomSnackBar(
+            context,
+            'Account created successfully.',
+            isError: false,
           );
           Navigator.of(context).pushReplacementNamed(LoginView.routeName);
         }
@@ -263,9 +267,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushReplacementNamed(LoginView.routeName);
+                            Navigator.of(context).pushReplacementNamed(LoginView.routeName);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,

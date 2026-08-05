@@ -3,6 +3,7 @@ import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
 import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit.dart';
+import 'package:connect_hub/utils/snack_bar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants.dart';
@@ -52,9 +53,10 @@ class _PostDetailsScaffold extends StatelessWidget {
           curr.errorMessage != null && curr.errorMessage != prev.errorMessage,
       listener: (context, state) {
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(
+          showCustomSnackBar(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            state.errorMessage!,
+          );
         }
       },
       child: PopScope(
@@ -146,19 +148,18 @@ class _PostDetailsScaffold extends StatelessWidget {
 
     if (shouldDelete != true || !context.mounted) return;
 
-    final messenger = ScaffoldMessenger.of(context);
     final postId = cubit.state.post.id;
 
     try {
       await cubit.deletePost();
       if (!context.mounted) return;
 
+      
       Navigator.of(context).pop(PostDetailsDeletedResult(postId: postId));
     } catch (_) {
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Could not delete this post. Please try again.'),
-        ),
+      showCustomSnackBar(
+        context,
+        'Could not delete this post. Please try again.',
       );
     }
   }
