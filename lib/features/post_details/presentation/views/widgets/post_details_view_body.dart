@@ -12,6 +12,7 @@ class PostDetailsViewBody extends StatelessWidget {
   final bool isLoadingComments;
   final List<Map<String, String>> likedByUsers;
   final VoidCallback? onLikePressed;
+  final Future<void> Function()? onRefresh;
 
   const PostDetailsViewBody({
     super.key,
@@ -20,6 +21,7 @@ class PostDetailsViewBody extends StatelessWidget {
     this.isLoadingComments = false,
     this.likedByUsers = const [],
     this.onLikePressed,
+    this.onRefresh,
   });
 
   @override
@@ -28,9 +30,11 @@ class PostDetailsViewBody extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         color: kHomeBackgroundColor,
-        child: ListView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: const EdgeInsets.all(16),
+        child: RefreshIndicator(
+          onRefresh: onRefresh ?? () async {},
+          child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.all(16),
         children: [
           PostDetailCard(
             post: post,
@@ -48,6 +52,7 @@ class PostDetailsViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 24),
         ],
+      ),
       ),
       ),
     );

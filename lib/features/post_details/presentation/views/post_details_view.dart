@@ -78,6 +78,7 @@ class _PostDetailsScaffold extends StatelessWidget {
                       isLoadingComments: state is PostDetailsLoading || state is PostDetailsInitial,
                       likedByUsers: state.likedByUsers,
                       onLikePressed: cubit.toggleLike,
+                      onRefresh: cubit.refresh,
                     );
                   },
                 ),

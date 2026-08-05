@@ -55,8 +55,42 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
     }
   }
 
-  Future<List<Map<String, String>>> _fetchLikedByUsers() async {
-    final likedBy = state.post.likedBy;
+  Future<void> refresh() async {
+    try {
+      final postData = await _databaseService.getData(
+        path: BackendEndpoints.posts,
+        docId: state.post.id,
+      ) as Map<String, dynamic>?;
+
+      PostModel updatedPost = state.post;
+      if (postData != null) {
+        updatedPost = PostModel.fromMap(postData);
+      }
+
+      final results = await Future.wait([
+        _interactionService.fetchComments(updatedPost.id),
+        _fetchLikedByUsers(likedByOverride: updatedPost.likedBy),
+      ]);
+
+      final comments = results[0] as List<CommentModel>;
+      final likedByUsers = results[1] as List<Map<String, String>>;
+
+      emit(PostDetailsSuccess(
+        post: updatedPost,
+        comments: comments,
+        likedByUsers: likedByUsers,
+      ));
+    } catch (e) {
+      if (state is PostDetailsSuccess) {
+        emit((state as PostDetailsSuccess).copyWith(
+          errorMessage: 'Failed to refresh.',
+        ));
+      }
+    }
+  }
+
+  Future<List<Map<String, String>>> _fetchLikedByUsers({List<String>? likedByOverride}) async {
+    final likedBy = likedByOverride ?? state.post.likedBy;
     if (likedBy.isEmpty) return [];
 
     final users = <Map<String, String>>[];
