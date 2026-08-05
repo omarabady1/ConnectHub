@@ -65,6 +65,12 @@ class UserAvatar extends StatelessWidget {
   }
 
   TextStyle get _textStyleForSize {
+    if (size >= 80) {
+      return AppTextStyles.semiBold20.copyWith(
+        color: Colors.white,
+        fontSize: size * 0.4,
+      );
+    }
     if (size >= 44) {
       return AppTextStyles.semiBold20.copyWith(color: Colors.white);
     }

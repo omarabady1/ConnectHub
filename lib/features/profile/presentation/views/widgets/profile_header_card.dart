@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
+import '../../../../../core/utils/user_avatar.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
   final String name;
-  final String avatarUrl;
-  final String bio;
-  final String location;
+  final String email;
 
   const ProfileHeaderCard({
     super.key,
-    this.name = 'Walter White',
-    this.avatarUrl =
-        'https://static.wikia.nocookie.net/breakingbad/images/e/e7/BB-S5B-Walt-590.jpg/revision/latest/scale-to-width-down/1000?cb=20250728222301',
-    this.bio = 'I am the Danger!',
-    this.location = 'Albuquerque, New Mexico',
+    required this.name,
+    required this.email,
   });
 
   @override
@@ -46,27 +42,10 @@ class ProfileHeaderCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 4),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(999),
-                child: Image.network(
-                  avatarUrl,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, progress) {
-                    if (progress == null) return child;
-                    return Container(
-                      color: const Color(0xFFE9E6F3),
-                      child: const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            child: UserAvatar(
+              initial: name.isNotEmpty ? name[0] : '?',
+              size: 120,
+              border: Border.all(color: Colors.white, width: 4),
             ),
           ),
           const SizedBox(height: 20),
@@ -78,18 +57,17 @@ class ProfileHeaderCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 448),
-            child: Text(
-              '$bio\n📍 $location',
+          if (email.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              email,
               style: AppTextStyles.regular14.copyWith(
                 color: const Color(0xFF464554),
                 height: 1.4,
               ),
               textAlign: TextAlign.center,
             ),
-          ),
+          ],
         ],
       ),
     );
