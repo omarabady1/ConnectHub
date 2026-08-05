@@ -49,9 +49,9 @@ class ProfileDrawer extends StatelessWidget {
     final name = user?.name ?? 'User';
     final email = user?.email ?? '';
 
-    return Drawer(
-      backgroundColor: kHomeBackgroundColor,
-      child: SafeArea(
+    return SafeArea(
+      child: Drawer(
+        backgroundColor: kHomeBackgroundColor,
         child: Column(
           children: [
             const SizedBox(height: 24),
