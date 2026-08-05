@@ -66,7 +66,14 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: _selectedIndex == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          setState(() => _selectedIndex = 0);
+        }
+      },
+      child: Scaffold(
       key: _scaffoldKey,
       backgroundColor: kHomeBackgroundColor,
       appBar: _buildAppBar(),
@@ -88,6 +95,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: HomeBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onTabChanged,
+      ),
       ),
     );
   }
