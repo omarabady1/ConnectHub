@@ -119,4 +119,29 @@ class FirestoreService implements DatabaseService {
       await ref.add(data);
     }
   }
+
+  @override
+  Future<void> deleteSubCollectionData({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+  }) async {
+    final ref = firestore
+        .collection(parentPath)
+        .doc(parentDocId)
+        .collection(subCollection);
+
+    const batchLimit = 500;
+
+    while (true) {
+      final snapshot = await ref.limit(batchLimit).get();
+      if (snapshot.docs.isEmpty) return;
+
+      final batch = firestore.batch();
+      for (final doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
+  }
 }

@@ -48,7 +48,15 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
       throw StateError('You can only delete posts you created.');
     }
 
-    await getIt<DatabaseService>().deleteData(
+    final databaseService = getIt<DatabaseService>();
+
+    await databaseService.deleteSubCollectionData(
+      parentPath: BackendEndpoints.posts,
+      parentDocId: post.id,
+      subCollection: BackendEndpoints.comments,
+    );
+
+    await databaseService.deleteData(
       path: BackendEndpoints.posts,
       docId: post.id,
     );

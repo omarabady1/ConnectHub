@@ -39,4 +39,10 @@ abstract class DatabaseService {
     required Map<String, dynamic> data,
     String? docId,
   });
+
+  Future<void> deleteSubCollectionData({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+  });
 }

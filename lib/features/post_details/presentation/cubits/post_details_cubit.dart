@@ -194,6 +194,12 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
     }
 
     try {
+      await _databaseService.deleteSubCollectionData(
+        parentPath: BackendEndpoints.posts,
+        parentDocId: post.id,
+        subCollection: BackendEndpoints.comments,
+      );
+
       await _databaseService.deleteData(
         path: BackendEndpoints.posts,
         docId: post.id,
