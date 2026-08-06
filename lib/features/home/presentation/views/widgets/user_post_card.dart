@@ -43,11 +43,7 @@ class UserPostCard extends StatelessWidget {
           onPostRemoved?.call(updatedPost.postId);
           if (!context.mounted) return;
 
-          showCustomSnackBar(
-            context,
-            'Post deleted.',
-            isError: false,
-          );
+          showCustomSnackBar(context, 'Post deleted.', isError: false);
         }
       },
       child: Container(
@@ -137,12 +133,8 @@ class UserPostCard extends StatelessWidget {
 
     try {
       await onPostDeleted?.call(post);
-
-      showCustomSnackBar(
-        context,
-        'Post deleted.',
-        isError: false,
-      );
+      if (!context.mounted) return;
+      showCustomSnackBar(context, 'Post deleted.', isError: false);
     } catch (_) {
       showCustomSnackBar(
         context,
