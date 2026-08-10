@@ -12,7 +12,7 @@ final class CreatePostInitial extends CreatePostState {
 
 final class CreatePostImageSelected extends CreatePostState {
   const CreatePostImageSelected(File selectedImage)
-    : super(selectedImage: selectedImage);
+      : super(selectedImage: selectedImage);
 }
 
 final class CreatePostLoading extends CreatePostState {

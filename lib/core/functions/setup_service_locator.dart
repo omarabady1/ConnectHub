@@ -13,6 +13,8 @@ import 'package:connect_hub/features/post_details/domain/repos/post_details_repo
 import 'package:get_it/get_it.dart';
 import '../../features/authentication/domain/repos/auth_repo.dart';
 
+import 'package:connect_hub/features/create_post/data/repos_implementation/create_post_repo_impl.dart';
+import 'package:connect_hub/features/create_post/domain/repos/create_post_repo.dart';
 import 'package:connect_hub/features/home/data/repos_implementation/home_repo_impl.dart';
 import 'package:connect_hub/features/home/domain/repos/home_repo.dart';
 import 'package:connect_hub/features/profile/data/repos_implementation/profile_repo_impl.dart';
@@ -55,6 +57,13 @@ void setupServiceLocator() {
     () => HomeRepoImpl(
       databaseService: getIt<DatabaseService>(),
       postInteractionService: getIt<PostInteractionService>(),
+    ),
+  );
+  getIt.registerLazySingleton<CreatePostRepo>(
+    () => CreatePostRepoImpl(
+      databaseService: getIt<DatabaseService>(),
+      cloudStorageService: getIt<CloudStorageService>(),
+      authRepo: getIt<AuthRepo>(),
     ),
   );
 }
