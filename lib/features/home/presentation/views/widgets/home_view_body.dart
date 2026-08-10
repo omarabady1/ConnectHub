@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../../domain/models/post_model.dart';
@@ -54,7 +53,9 @@ class HomeViewBody extends StatelessWidget {
             if (post.isCurrentUser) {
               return UserPostCard(
                 post: post,
-                onPostDeleted: (post) => _deletePost(post),
+                onPostDeleted: (post) =>
+                    getIt<PostInteractionService>()
+                        .deletePost(post.id),
               );
             }
             return RegularPostCard(post: post);
@@ -62,32 +63,5 @@ class HomeViewBody extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<void> _deletePost(PostModel post) async {
-    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
-    if (currentUserId == null ||
-        post.userId.isEmpty ||
-        post.userId != currentUserId) {
-      throw StateError('You can only delete posts you created.');
-    }
-
-    final firestore = FirebaseFirestore.instance;
-    final commentsSnapshot = await firestore
-        .collection(BackendEndpoints.posts)
-        .doc(post.id)
-        .collection(BackendEndpoints.comments)
-        .get();
-
-    final batch = firestore.batch();
-    for (final doc in commentsSnapshot.docs) {
-      batch.delete(doc.reference);
-    }
-    batch.delete(
-      firestore
-          .collection(BackendEndpoints.posts)
-          .doc(post.id),
-    );
-    await batch.commit();
   }
 }

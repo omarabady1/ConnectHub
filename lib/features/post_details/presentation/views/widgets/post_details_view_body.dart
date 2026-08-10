@@ -13,7 +13,6 @@ class PostDetailsViewBody extends StatelessWidget {
   final List<Map<String, String>> likedByUsers;
   final VoidCallback? onLikePressed;
   final VoidCallback? onDeletePressed;
-  final Future<void> Function()? onRefresh;
 
   const PostDetailsViewBody({
     super.key,
@@ -23,7 +22,6 @@ class PostDetailsViewBody extends StatelessWidget {
     this.likedByUsers = const [],
     this.onLikePressed,
     this.onDeletePressed,
-    this.onRefresh,
   });
 
   @override
@@ -32,30 +30,27 @@ class PostDetailsViewBody extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         color: kHomeBackgroundColor,
-        child: RefreshIndicator(
-          onRefresh: onRefresh ?? () async {},
-          child: ListView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: const EdgeInsets.all(16),
-            children: [
-              PostDetailCard(
-                post: post,
-                onLikePressed: onLikePressed,
-                onDeletePressed: onDeletePressed,
-              ),
-              const SizedBox(height: 24),
-              LikedBySection(likedByUsers: likedByUsers),
-              const SizedBox(height: 24),
-              CommentsSection(
-                totalComments: isLoadingComments
-                    ? post.commentsCount
-                    : comments.length,
-                comments: comments,
-                isLoading: isLoadingComments,
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding: const EdgeInsets.all(16),
+          children: [
+            PostDetailCard(
+              post: post,
+              onLikePressed: onLikePressed,
+              onDeletePressed: onDeletePressed,
+            ),
+            const SizedBox(height: 24),
+            LikedBySection(likedByUsers: likedByUsers),
+            const SizedBox(height: 24),
+            CommentsSection(
+              totalComments: isLoadingComments
+                  ? post.commentsCount
+                  : comments.length,
+              comments: comments,
+              isLoading: isLoadingComments,
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );

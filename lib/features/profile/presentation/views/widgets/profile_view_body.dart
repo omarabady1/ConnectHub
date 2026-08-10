@@ -68,13 +68,6 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     await future;
   }
 
-  void _refreshDeletedPost(String _) {
-    final future = _loadUserPosts();
-    setState(() {
-      _userPostsFuture = future;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = getIt<AuthRepo>().getCachedUser();
@@ -110,7 +103,6 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                 final posts = snapshot.data ?? [];
                 return UserPostsGrid(
                   posts: posts,
-                  onPostRemoved: _refreshDeletedPost,
                   onPostDeleted: _deletePost,
                 );
               },

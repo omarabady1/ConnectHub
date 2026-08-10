@@ -4,13 +4,11 @@ import '../../../../home/presentation/views/widgets/user_post_card.dart';
 
 class UserPostsGrid extends StatelessWidget {
   final List<PostModel> posts;
-  final ValueChanged<String>? onPostRemoved;
   final Future<void> Function(PostModel post)? onPostDeleted;
 
   const UserPostsGrid({
     super.key,
     required this.posts,
-    this.onPostRemoved,
     this.onPostDeleted,
   });
 

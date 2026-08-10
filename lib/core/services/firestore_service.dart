@@ -166,4 +166,44 @@ class FirestoreService implements DatabaseService {
       (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
     );
   }
+
+  @override
+  Stream<Map<String, dynamic>?> getDocStream({
+    required String path,
+    required String docId,
+  }) {
+    return firestore
+        .collection(path)
+        .doc(docId)
+        .snapshots()
+        .map((snapshot) => snapshot.data());
+  }
+
+  @override
+  Stream<List<Map<String, dynamic>>> getSubCollectionStream({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+    Map<String, dynamic>? query,
+  }) {
+    Query<Map<String, dynamic>> ref = firestore
+        .collection(parentPath)
+        .doc(parentDocId)
+        .collection(subCollection);
+
+    if (query != null) {
+      if (query['orderBy'] != null) {
+        ref = ref.orderBy(
+          query['orderBy'],
+          descending: query['descending'] ?? false,
+        );
+      }
+      if (query['limit'] != null) {
+        ref = ref.limit(query['limit']);
+      }
+    }
+    return ref.snapshots().map(
+      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+    );
+  }
 }
