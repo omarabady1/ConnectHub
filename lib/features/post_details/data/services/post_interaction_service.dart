@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
+import 'package:connect_hub/features/post_details/data/models/comment_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PostInteractionService {

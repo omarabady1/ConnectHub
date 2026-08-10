@@ -1,4 +1,4 @@
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../core/utils/user_avatar.dart';

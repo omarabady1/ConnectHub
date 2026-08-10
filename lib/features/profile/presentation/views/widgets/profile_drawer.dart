@@ -1,9 +1,7 @@
 import 'package:connect_hub/constants.dart';
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/core/services/shared_preferences_singleton.dart';
-import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:connect_hub/features/profile/domain/repos/profile_repo.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/utils/user_avatar.dart';
 import '../../../../../utils/app_text_styles.dart';
@@ -33,8 +31,7 @@ class ProfileDrawer extends StatelessWidget {
 
     if (confirmed != true || !context.mounted) return;
 
-    await FirebaseAuth.instance.signOut();
-    Prefs.removeString(kUserData);
+    await getIt<ProfileRepo>().signOut();
 
     if (!context.mounted) return;
 
@@ -45,9 +42,9 @@ class ProfileDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = getIt<AuthRepo>().getCachedUser();
-    final name = user?.name ?? 'User';
-    final email = user?.email ?? '';
+    final userProfile = getIt<ProfileRepo>().getCachedUserProfile();
+    final name = userProfile?.name ?? 'User';
+    final email = userProfile?.email ?? '';
 
     return SafeArea(
       child: Drawer(
@@ -56,7 +53,7 @@ class ProfileDrawer extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             UserAvatar(
-              avatarUrl: user?.avatarUrl,
+              avatarUrl: userProfile?.avatarUrl,
               initial: name.isNotEmpty ? name[0] : '?',
               size: 80,
               border: Border.all(color: kBrandIndigo, width: 2),

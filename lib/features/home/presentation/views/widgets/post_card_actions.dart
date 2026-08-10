@@ -1,9 +1,9 @@
 import 'dart:developer' as developer;
 
-import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
+import 'package:connect_hub/features/home/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
 
@@ -14,6 +14,7 @@ class PostCardActions extends StatefulWidget {
   final bool isLiked;
   final Color borderColor;
   final VoidCallback? onCommentPressed;
+  final Future<void> Function()? onLikeToggle;
 
   const PostCardActions({
     super.key,
@@ -23,6 +24,7 @@ class PostCardActions extends StatefulWidget {
     this.isLiked = false,
     this.borderColor = kCardBorderColor,
     this.onCommentPressed,
+    this.onLikeToggle,
   });
 
   @override
@@ -63,11 +65,15 @@ class _PostCardActionsState extends State<PostCardActions> {
     if (userId == null) return;
 
     try {
-      await getIt<PostInteractionService>().toggleLike(
-        postId: widget.postId,
-        userId: userId,
-        currentlyLiked: previousLiked,
-      );
+      if (widget.onLikeToggle != null) {
+        await widget.onLikeToggle!();
+      } else {
+        await context.read<HomeCubit>().toggleLike(
+              postId: widget.postId,
+              userId: userId,
+              currentlyLiked: previousLiked,
+            );
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {

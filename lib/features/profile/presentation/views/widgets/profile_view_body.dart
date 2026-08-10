@@ -1,10 +1,8 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/core/services/database_service.dart';
-import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
-import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
+import 'package:connect_hub/features/profile/domain/repos/profile_repo.dart';
+import 'package:connect_hub/features/profile/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
-import '../../../../home/domain/models/post_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'profile_feed_tabs.dart';
 import 'profile_header_card.dart';
 import 'user_posts_grid.dart';
@@ -14,73 +12,75 @@ class ProfileViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = getIt<AuthRepo>().getCachedUser();
-    final databaseService = getIt<DatabaseService>();
-    final postsStream = databaseService.getDataStream(
-      path: BackendEndpoints.posts,
-      query: const {
-        'orderBy': 'createdAt',
-        'descending': true,
-      },
-    );
+    try {
+      context.read<ProfileCubit>();
+      return const _ProfileViewBodyContent();
+    } catch (_) {
+      return BlocProvider(
+        create: (context) => ProfileCubit(getIt<ProfileRepo>())..loadProfile(),
+        child: const _ProfileViewBodyContent(),
+      );
+    }
+  }
+}
 
-    return RefreshIndicator(
-      onRefresh: () => Future.delayed(
-        const Duration(milliseconds: 500),
-      ),
-      child: SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
-        children: [
-          ProfileHeaderCard(
-            name: user?.name ?? 'User',
-            email: user?.email ?? '',
-            avatarUrl: user?.avatarUrl,
-          ),
-          const ProfileFeedTabs(),
-          StreamBuilder<List<Map<String, dynamic>>>(
-            stream: postsStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 48),
-                  child: Center(
-                    child: Text(
-                      snapshot.error.toString(),
-                    ),
-                  ),
-                );
-              }
+class _ProfileViewBodyContent extends StatelessWidget {
+  const _ProfileViewBodyContent();
 
-              if (snapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return const Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 48),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoading || state is ProfileInitial) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 48),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
 
-              final posts = (snapshot.data ?? [])
-                  .map(PostModel.fromMap)
-                  .where((post) => post.isCurrentUser)
-                  .toList();
+        if (state is ProfileError) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 48),
+            child: Center(
+              child: Text(state.message),
+            ),
+          );
+        }
 
-              return UserPostsGrid(
-                posts: posts,
-                onPostDeleted: (post) =>
-                    getIt<PostInteractionService>()
-                        .deletePost(post.id),
-              );
+        if (state is ProfileLoaded) {
+          final user = state.userProfile;
+          final posts = state.posts;
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<ProfileCubit>().loadProfile();
             },
-          ),
-          const SizedBox(height: 32),
-        ],
-      ),
-      ),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  ProfileHeaderCard(
+                    name: user.name,
+                    email: user.email,
+                    avatarUrl: user.avatarUrl,
+                  ),
+                  const ProfileFeedTabs(),
+                  UserPostsGrid(
+                    posts: posts,
+                    onPostDeleted: (post) =>
+                        context.read<ProfileCubit>().deletePost(post.id),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
 }

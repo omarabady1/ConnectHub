@@ -1,13 +1,13 @@
-import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
+import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
 import 'package:connect_hub/features/post_details/presentation/views/widgets/comment_item.dart';
 import 'package:flutter/material.dart';
 import '../../../../../utils/app_text_styles.dart';
 
 class CommentsSection extends StatelessWidget {
   final int totalComments;
-  final List<CommentModel> comments;
+  final List<CommentEntity> comments;
   final bool isLoading;
-  final void Function(CommentModel comment)? onDeleteComment;
+  final void Function(CommentEntity comment)? onDeleteComment;
 
   const CommentsSection({
     super.key,

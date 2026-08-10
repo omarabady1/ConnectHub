@@ -1,12 +1,12 @@
-import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
+import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/utils/user_avatar.dart';
 
 class CommentItem extends StatelessWidget {
-  final CommentModel comment;
-  final void Function(CommentModel comment)? onDeleteComment;
+  final CommentEntity comment;
+  final void Function(CommentEntity comment)? onDeleteComment;
 
   const CommentItem({
     super.key,

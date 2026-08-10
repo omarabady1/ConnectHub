@@ -3,4 +3,5 @@ class BackendEndpoints {
   static const getUserData = 'users';
   static const posts = 'posts';
   static const comments = 'comments';
+  static const chatbotConfig = 'config';
 }

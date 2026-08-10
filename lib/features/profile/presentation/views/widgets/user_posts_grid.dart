@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import '../../../../home/presentation/views/widgets/user_post_card.dart';
 
 class UserPostsGrid extends StatelessWidget {
