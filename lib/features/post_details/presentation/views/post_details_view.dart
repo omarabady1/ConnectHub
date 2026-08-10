@@ -170,59 +170,64 @@ class _PostDetailsScaffoldState extends State<_PostDetailsScaffold> {
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder<List<dynamic>>(
-              stream: CombineLatestStream.list([
-                _postStream,
-                _commentsStream,
-              ]),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                }
-
-                if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return PostDetailsViewBody(
-                    post: widget.post,
-                    comments: const [],
-                    isLoadingComments: true,
-                    onLikePressed: () =>
-                        _toggleLike(widget.post),
-                  );
-                }
-
-                final data = snapshot.data!;
-                final post = data[0] as PostModel?;
-                final comments =
-                    data[1] as List<CommentModel>;
-
-                if (post == null) {
-                  return const Center(
-                    child: Text('Post not found.'),
-                  );
-                }
-
-                return FutureBuilder<
-                  List<Map<String, String>>
-                >(
-                  future:
-                      _service.fetchLikedByUsers(post.likedBy),
-                  builder: (context, likedBySnapshot) {
-                    return PostDetailsViewBody(
-                      post: post,
-                      comments: comments,
-                      likedByUsers:
-                          likedBySnapshot.data ?? const [],
-                      onLikePressed: () => _toggleLike(post),
-                      onDeletePressed: post.isCurrentUser
-                          ? () => _confirmDeletePost(post)
-                          : null,
+            child: RefreshIndicator(
+              onRefresh: () => Future.delayed(
+                const Duration(milliseconds: 500),
+              ),
+              child: StreamBuilder<List<dynamic>>(
+                stream: CombineLatestStream.list([
+                  _postStream,
+                  _commentsStream,
+                ]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
                     );
-                  },
-                );
-              },
+                  }
+
+                  if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return PostDetailsViewBody(
+                      post: widget.post,
+                      comments: const [],
+                      isLoadingComments: true,
+                      onLikePressed: () =>
+                          _toggleLike(widget.post),
+                    );
+                  }
+
+                  final data = snapshot.data!;
+                  final post = data[0] as PostModel?;
+                  final comments =
+                      data[1] as List<CommentModel>;
+
+                  if (post == null) {
+                    return const Center(
+                      child: Text('Post not found.'),
+                    );
+                  }
+
+                  return FutureBuilder<
+                    List<Map<String, String>>
+                  >(
+                    future:
+                        _service.fetchLikedByUsers(post.likedBy),
+                    builder: (context, likedBySnapshot) {
+                      return PostDetailsViewBody(
+                        post: post,
+                        comments: comments,
+                        likedByUsers:
+                            likedBySnapshot.data ?? const [],
+                        onLikePressed: () => _toggleLike(post),
+                        onDeletePressed: post.isCurrentUser
+                            ? () => _confirmDeletePost(post)
+                            : null,
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
           CommentInputBottomBar(onSendComment: _addComment),

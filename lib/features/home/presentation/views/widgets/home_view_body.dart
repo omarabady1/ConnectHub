@@ -19,49 +19,62 @@ class HomeViewBody extends StatelessWidget {
       query: const {'orderBy': 'createdAt', 'descending': true},
     );
 
-    return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: postsStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        }
+    return RefreshIndicator(
+      onRefresh: () => Future.delayed(
+        const Duration(milliseconds: 500),
+      ),
+      child: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: postsStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+          if (snapshot.connectionState ==
+              ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-        final posts = (snapshot.data ?? [])
-            .map(PostModel.fromMap)
-            .toList();
+          final posts = (snapshot.data ?? [])
+              .map(PostModel.fromMap)
+              .toList();
 
-        if (posts.isEmpty) {
-          return const Center(child: Text('No posts yet.'));
-        }
+          if (posts.isEmpty) {
+            return const Center(
+              child: Text('No posts yet.'),
+            );
+          }
 
-        return ListView.separated(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-            bottom: 100,
-          ),
-          itemCount: posts.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            final post = posts[index];
-            if (post.isCurrentUser) {
-              return UserPostCard(
-                post: post,
-                onPostDeleted: (post) =>
-                    getIt<PostInteractionService>()
-                        .deletePost(post.id),
-              );
-            }
-            return RegularPostCard(post: post);
-          },
-        );
-      },
+          return ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: 100,
+            ),
+            itemCount: posts.length,
+            separatorBuilder: (_, _) =>
+                const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              if (post.isCurrentUser) {
+                return UserPostCard(
+                  post: post,
+                  onPostDeleted: (post) =>
+                      getIt<PostInteractionService>()
+                          .deletePost(post.id),
+                );
+              }
+              return RegularPostCard(post: post);
+            },
+          );
+        },
+      ),
     );
   }
 }

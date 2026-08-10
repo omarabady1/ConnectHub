@@ -24,7 +24,11 @@ class ProfileViewBody extends StatelessWidget {
       },
     );
 
-    return SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () => Future.delayed(
+        const Duration(milliseconds: 500),
+      ),
+      child: SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
@@ -75,6 +79,7 @@ class ProfileViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 32),
         ],
+      ),
       ),
     );
   }
