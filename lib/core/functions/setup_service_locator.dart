@@ -13,6 +13,8 @@ import 'package:connect_hub/features/post_details/domain/repos/post_details_repo
 import 'package:get_it/get_it.dart';
 import '../../features/authentication/domain/repos/auth_repo.dart';
 
+import 'package:connect_hub/features/home/data/repos_implementation/home_repo_impl.dart';
+import 'package:connect_hub/features/home/domain/repos/home_repo.dart';
 import 'package:connect_hub/features/profile/data/repos_implementation/profile_repo_impl.dart';
 import 'package:connect_hub/features/profile/domain/repos/profile_repo.dart';
 
@@ -45,6 +47,12 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<ProfileRepo>(
     () => ProfileRepoImpl(
       authRepo: getIt<AuthRepo>(),
+      databaseService: getIt<DatabaseService>(),
+      postInteractionService: getIt<PostInteractionService>(),
+    ),
+  );
+  getIt.registerLazySingleton<HomeRepo>(
+    () => HomeRepoImpl(
       databaseService: getIt<DatabaseService>(),
       postInteractionService: getIt<PostInteractionService>(),
     ),

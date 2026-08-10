@@ -1,4 +1,8 @@
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
+import 'package:connect_hub/features/home/domain/repos/home_repo.dart';
+import 'package:connect_hub/features/home/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants.dart';
 import '../../../chatbot/presentaion/views/widgets/chatbot_top_app_bar.dart';
 import '../../../chatbot/presentaion/views/widgets/chatbot_view_body.dart';
@@ -58,7 +62,9 @@ class HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return BlocProvider(
+      create: (context) => HomeCubit(getIt<HomeRepo>())..fetchPosts(),
+      child: PopScope(
       canPop: _selectedIndex == 0,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) {
@@ -89,6 +95,7 @@ class HomeViewState extends State<HomeView> {
           onItemTapped: onTabChanged,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
