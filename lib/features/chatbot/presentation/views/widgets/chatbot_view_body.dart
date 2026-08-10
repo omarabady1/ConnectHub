@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/chatbot/domain/entities/chat_message_entity.dart';
 import 'package:connect_hub/features/chatbot/presentation/cubits/chatbot_cubit/chatbot_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,8 +52,29 @@ class _ChatbotViewBodyState extends State<ChatbotViewBody> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const ChatbotWelcomeHeader(),
-                    ...messages.map((message) {
-                      return ChatMessageBubble(message: message);
+                    ...List.generate(messages.length, (index) {
+                      final message = messages[index];
+                      String? userPrompt;
+                      bool showActions = true;
+
+                      if (message.sender == ChatMessageSender.ai) {
+                        if (message.id == 'welcome_msg') {
+                          showActions = false;
+                        } else {
+                          for (int i = index - 1; i >= 0; i--) {
+                            if (messages[i].sender == ChatMessageSender.user) {
+                              userPrompt = messages[i].text;
+                              break;
+                            }
+                          }
+                        }
+                      }
+
+                      return ChatMessageBubble(
+                        message: message,
+                        userPrompt: userPrompt,
+                        showActions: showActions,
+                      );
                     }),
                     const SizedBox(height: 16),
                   ],
