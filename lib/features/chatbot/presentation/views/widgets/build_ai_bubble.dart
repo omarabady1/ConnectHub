@@ -9,20 +9,18 @@ import 'package:flutter/services.dart';
 class BuildAiBubble extends StatelessWidget {
   final ChatMessageEntity message;
   final String? userPrompt;
+  final bool showActions;
 
   const BuildAiBubble({
     super.key,
     required this.message,
     this.userPrompt,
+    this.showActions = true,
   });
 
   void _onCopy(BuildContext context) {
     Clipboard.setData(ClipboardData(text: message.text));
-    showCustomSnackBar(
-      context,
-      'Response copied to clipboard',
-      isError: false,
-    );
+    showCustomSnackBar(context, 'Response copied to clipboard', isError: false);
   }
 
   ({String title, String content}) _parseAiResponse(
@@ -128,25 +126,27 @@ class BuildAiBubble extends StatelessWidget {
                       height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(color: Color(0xFFE4E1ED), height: 1),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _ActionButton(
-                        icon: Icons.copy_rounded,
-                        label: 'Copy',
-                        onTap: () => _onCopy(context),
-                      ),
-                      const SizedBox(width: 12),
-                      _ActionButton(
-                        icon: Icons.post_add_rounded,
-                        label: 'Create Post',
-                        onTap: () => _onCreatePost(context),
-                      ),
-                    ],
-                  ),
+                  if (showActions) ...[
+                    const SizedBox(height: 12),
+                    const Divider(color: Color(0xFFE4E1ED), height: 1),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _ActionButton(
+                          icon: Icons.copy_rounded,
+                          label: 'Copy',
+                          onTap: () => _onCopy(context),
+                        ),
+                        const SizedBox(width: 12),
+                        _ActionButton(
+                          icon: Icons.post_add_rounded,
+                          label: 'Create Post',
+                          onTap: () => _onCreatePost(context),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -179,17 +179,11 @@ class _ActionButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: kBrandIndigo,
-            ),
+            Icon(icon, size: 16, color: kBrandIndigo),
             const SizedBox(width: 4),
             Text(
               label,
-              style: AppTextStyles.medium12.copyWith(
-                color: kBrandIndigo,
-              ),
+              style: AppTextStyles.medium12.copyWith(color: kBrandIndigo),
             ),
           ],
         ),

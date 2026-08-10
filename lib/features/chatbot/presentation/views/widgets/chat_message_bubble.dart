@@ -7,11 +7,13 @@ import 'build_user_bubble.dart';
 class ChatMessageBubble extends StatelessWidget {
   final ChatMessageEntity message;
   final String? userPrompt;
+  final bool showActions;
 
   const ChatMessageBubble({
     super.key,
     required this.message,
     this.userPrompt,
+    this.showActions = true,
   });
 
   @override
@@ -25,6 +27,7 @@ class ChatMessageBubble extends StatelessWidget {
       content = BuildAiBubble(
         message: message,
         userPrompt: userPrompt,
+        showActions: showActions,
       );
     }
 
