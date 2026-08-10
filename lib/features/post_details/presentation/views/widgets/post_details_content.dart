@@ -1,25 +1,20 @@
-import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
+import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
+import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_cubit.dart';
+import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_state.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
-import '../../../../home/domain/models/post_model.dart';
-import '../../../domain/models/comment_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'post_details_view_body.dart';
 
 class PostDetailsContent extends StatelessWidget {
   final PostModel initialPost;
-  final Stream<PostModel?> postStream;
-  final Stream<List<CommentModel>> commentsStream;
-  final PostInteractionService service;
   final void Function(PostModel post) onLikePressed;
   final void Function(PostModel post)? onDeletePressed;
-  final void Function(CommentModel comment)? onDeleteComment;
+  final void Function(CommentEntity comment)? onDeleteComment;
 
   const PostDetailsContent({
     super.key,
     required this.initialPost,
-    required this.postStream,
-    required this.commentsStream,
-    required this.service,
     required this.onLikePressed,
     this.onDeletePressed,
     this.onDeleteComment,
@@ -27,55 +22,33 @@ class PostDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<dynamic>>(
-      stream: CombineLatestStream.list([
-        postStream,
-        commentsStream,
-      ]),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
+    return BlocBuilder<PostDetailsCubit, PostDetailsState>(
+      builder: (context, state) {
+        if (state is PostDetailsError) {
           return Center(
-            child: Text(snapshot.error.toString()),
+            child: Text(state.message),
           );
         }
 
-        if (snapshot.connectionState ==
-            ConnectionState.waiting) {
+        if (state is PostDetailsLoaded) {
           return PostDetailsViewBody(
-            post: initialPost,
-            comments: const [],
-            isLoadingComments: true,
-            onLikePressed: () =>
-                onLikePressed(initialPost),
+            post: state.post,
+            comments: state.comments,
+            isLoadingComments: state.isLoadingComments,
+            likedByUsers: state.likedByUsers,
+            onLikePressed: () => onLikePressed(state.post),
+            onDeletePressed: state.post.isCurrentUser
+                ? () => onDeletePressed?.call(state.post)
+                : null,
+            onDeleteComment: onDeleteComment,
           );
         }
 
-        final data = snapshot.data!;
-        final post = data[0] as PostModel?;
-        final comments =
-            data[1] as List<CommentModel>;
-
-        if (post == null) {
-          return const Center(
-            child: Text('Post not found.'),
-          );
-        }
-
-        return FutureBuilder<List<Map<String, String>>>(
-          future: service.fetchLikedByUsers(post.likedBy),
-          builder: (context, likedBySnapshot) {
-            return PostDetailsViewBody(
-              post: post,
-              comments: comments,
-              likedByUsers:
-                  likedBySnapshot.data ?? const [],
-              onLikePressed: () => onLikePressed(post),
-              onDeletePressed: post.isCurrentUser
-                  ? () => onDeletePressed?.call(post)
-                  : null,
-              onDeleteComment: onDeleteComment,
-            );
-          },
+        return PostDetailsViewBody(
+          post: initialPost,
+          comments: const [],
+          isLoadingComments: true,
+          onLikePressed: () => onLikePressed(initialPost),
         );
       },
     );

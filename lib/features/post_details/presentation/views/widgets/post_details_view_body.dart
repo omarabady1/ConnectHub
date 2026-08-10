@@ -1,4 +1,4 @@
-import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
+import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
 import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import 'comments_section.dart';
@@ -8,12 +8,12 @@ import '../../../../home/domain/models/post_model.dart';
 
 class PostDetailsViewBody extends StatelessWidget {
   final PostModel post;
-  final List<CommentModel> comments;
+  final List<CommentEntity> comments;
   final bool isLoadingComments;
   final List<Map<String, String>> likedByUsers;
   final VoidCallback? onLikePressed;
   final VoidCallback? onDeletePressed;
-  final void Function(CommentModel comment)? onDeleteComment;
+  final void Function(CommentEntity comment)? onDeleteComment;
 
   const PostDetailsViewBody({
     super.key,

@@ -1,13 +1,14 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
-import 'package:connect_hub/core/services/database_service.dart';
-import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
+import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
+import 'package:connect_hub/features/post_details/domain/repos/post_details_repo.dart';
+import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_cubit.dart';
+import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants.dart';
 import '../../../home/domain/models/post_model.dart';
 import '../../../home/presentation/views/home_view.dart';
 import '../../../home/presentation/views/widgets/home_bottom_nav_bar.dart';
-import '../../domain/models/comment_model.dart';
 import 'widgets/comment_input_bottom_bar.dart';
 import 'widgets/delete_comment_dialog.dart';
 import 'widgets/delete_post_dialog.dart';
@@ -23,7 +24,12 @@ class PostDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _PostDetailsScaffold(post: post);
+    return BlocProvider(
+      create: (context) => PostDetailsCubit(
+        postDetailsRepo: getIt<PostDetailsRepo>(),
+      )..init(post),
+      child: _PostDetailsScaffold(post: post),
+    );
   }
 }
 
@@ -33,96 +39,39 @@ class PostDetailsDeletedResult {
   final String postId;
 }
 
-class _PostDetailsScaffold extends StatefulWidget {
+class _PostDetailsScaffold extends StatelessWidget {
   final PostModel post;
 
   const _PostDetailsScaffold({required this.post});
 
-  @override
-  State<_PostDetailsScaffold> createState() =>
-      _PostDetailsScaffoldState();
-}
-
-class _PostDetailsScaffoldState
-    extends State<_PostDetailsScaffold> {
-  final _db = getIt<DatabaseService>();
-  final _service = getIt<PostInteractionService>();
-  late final Stream<PostModel?> _postStream;
-  late final Stream<List<CommentModel>> _commentsStream;
-
-  @override
-  void initState() {
-    super.initState();
-    _initStreams();
+  Future<void> _handleToggleLike(BuildContext context, PostModel post) async {
+    context.read<PostDetailsCubit>().toggleLike();
   }
 
-  void _initStreams() {
-    _postStream = _db
-        .getDocStream(
-          path: BackendEndpoints.posts,
-          docId: widget.post.id,
-        )
-        .map(
-          (data) => data != null
-              ? PostModel.fromMap(data)
-              : null,
-        );
-
-    _commentsStream = _db
-        .getSubCollectionStream(
-          parentPath: BackendEndpoints.posts,
-          parentDocId: widget.post.id,
-          subCollection: BackendEndpoints.comments,
-          query: const {
-            'orderBy': 'createdAt',
-            'descending': true,
-          },
-        )
-        .map(
-          (list) =>
-              list.map(CommentModel.fromMap).toList(),
-        );
+  Future<void> _handleAddComment(BuildContext context, String text) async {
+    context.read<PostDetailsCubit>().addComment(text);
   }
 
-  Future<void> _handleToggleLike(PostModel post) async {
-    await _service.toggleLikeForCurrentUser(
-      post.id,
-      post.isLiked,
-    );
-  }
-
-  Future<void> _handleAddComment(String text) async {
-    await _service.addCommentFromCurrentUser(
-      postId: widget.post.id,
-      text: text,
-    );
-  }
-
-  Future<void> _handleDeleteComment(CommentModel comment) async {
+  Future<void> _handleDeleteComment(
+    BuildContext context,
+    CommentEntity comment,
+  ) async {
     final confirmed = await DeleteCommentDialog.show(context);
-    if (!confirmed || !mounted) return;
+    if (!confirmed || !context.mounted) return;
 
-    await _service.deleteComment(
-      postId: widget.post.id,
-      commentId: comment.id,
-      commentUserId: comment.userId,
-    );
+    context.read<PostDetailsCubit>().deleteComment(comment);
   }
 
-  Future<void> _handleDeletePost(PostModel post) async {
-    final confirmed =
-        await DeletePostDialog.show(context);
-    if (!confirmed || !mounted) return;
+  Future<void> _handleDeletePost(BuildContext context, PostModel post) async {
+    final confirmed = await DeletePostDialog.show(context);
+    if (!confirmed || !context.mounted) return;
 
-    await _service.deletePost(post.id);
-    if (!mounted) return;
-    Navigator.of(context).pop();
+    context.read<PostDetailsCubit>().deletePost();
   }
 
-  void _handleBackPressed() =>
-      Navigator.of(context).pop();
+  void _handleBackPressed(BuildContext context) => Navigator.of(context).pop();
 
-  void _handleBottomNavTapped(int index) {
+  void _handleBottomNavTapped(BuildContext context, int index) {
     Navigator.of(context).pop();
     if (index != 0) {
       homeViewKey.currentState?.onTabChanged(index);
@@ -131,24 +80,28 @@ class _PostDetailsScaffoldState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kHomeBackgroundColor,
-      appBar: PostDetailsTopAppBar(
-        onBackPressed: _handleBackPressed,
-      ),
-      body: _PostDetailsBody(
-        initialPost: widget.post,
-        postStream: _postStream,
-        commentsStream: _commentsStream,
-        service: _service,
-        onLikePressed: _handleToggleLike,
-        onDeletePressed: _handleDeletePost,
-        onDeleteComment: _handleDeleteComment,
-        onSendComment: _handleAddComment,
-      ),
-      bottomNavigationBar: HomeBottomNavBar(
-        selectedIndex: 0,
-        onItemTapped: _handleBottomNavTapped,
+    return BlocListener<PostDetailsCubit, PostDetailsState>(
+      listener: (context, state) {
+        if (state is PostDeletedState) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: kHomeBackgroundColor,
+        appBar: PostDetailsTopAppBar(
+          onBackPressed: () => _handleBackPressed(context),
+        ),
+        body: _PostDetailsBody(
+          initialPost: post,
+          onLikePressed: (post) => _handleToggleLike(context, post),
+          onDeletePressed: (post) => _handleDeletePost(context, post),
+          onDeleteComment: (comment) => _handleDeleteComment(context, comment),
+          onSendComment: (text) => _handleAddComment(context, text),
+        ),
+        bottomNavigationBar: HomeBottomNavBar(
+          selectedIndex: 0,
+          onItemTapped: (index) => _handleBottomNavTapped(context, index),
+        ),
       ),
     );
   }
@@ -156,19 +109,13 @@ class _PostDetailsScaffoldState
 
 class _PostDetailsBody extends StatelessWidget {
   final PostModel initialPost;
-  final Stream<PostModel?> postStream;
-  final Stream<List<CommentModel>> commentsStream;
-  final PostInteractionService service;
   final void Function(PostModel post) onLikePressed;
   final void Function(PostModel post) onDeletePressed;
-  final void Function(CommentModel comment) onDeleteComment;
+  final void Function(CommentEntity comment) onDeleteComment;
   final ValueChanged<String> onSendComment;
 
   const _PostDetailsBody({
     required this.initialPost,
-    required this.postStream,
-    required this.commentsStream,
-    required this.service,
     required this.onLikePressed,
     required this.onDeletePressed,
     required this.onDeleteComment,
@@ -186,9 +133,6 @@ class _PostDetailsBody extends StatelessWidget {
             ),
             child: PostDetailsContent(
               initialPost: initialPost,
-              postStream: postStream,
-              commentsStream: commentsStream,
-              service: service,
               onLikePressed: onLikePressed,
               onDeletePressed: onDeletePressed,
               onDeleteComment: onDeleteComment,
