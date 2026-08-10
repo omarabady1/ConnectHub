@@ -147,6 +147,43 @@ class PostInteractionService {
     await addComment(postId: postId, comment: comment);
   }
 
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+    required String commentUserId,
+  }) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId == null) {
+      throw StateError('Not authenticated.');
+    }
+    if (currentUserId != commentUserId) {
+      throw StateError('Not authorized to delete this comment.');
+    }
+
+    try {
+      await _db.deleteSubCollectionDoc(
+        parentPath: BackendEndpoints.posts,
+        parentDocId: postId,
+        subCollection: BackendEndpoints.comments,
+        docId: commentId,
+      );
+
+      await _db.updateData(
+        path: BackendEndpoints.posts,
+        docId: postId,
+        data: {'commentsCount': FieldValue.increment(-1)},
+      );
+    } catch (e, s) {
+      log(
+        'Failed to delete comment $commentId from $postId',
+        name: 'PostInteractionService',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
   Future<void> deletePost(String postId) async {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserId == null) {

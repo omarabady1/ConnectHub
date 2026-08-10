@@ -9,6 +9,7 @@ import '../../../home/presentation/views/home_view.dart';
 import '../../../home/presentation/views/widgets/home_bottom_nav_bar.dart';
 import '../../domain/models/comment_model.dart';
 import 'widgets/comment_input_bottom_bar.dart';
+import 'widgets/delete_comment_dialog.dart';
 import 'widgets/delete_post_dialog.dart';
 import 'widgets/post_details_top_app_bar.dart';
 import 'widgets/post_details_content.dart';
@@ -97,6 +98,17 @@ class _PostDetailsScaffoldState
     );
   }
 
+  Future<void> _handleDeleteComment(CommentModel comment) async {
+    final confirmed = await DeleteCommentDialog.show(context);
+    if (!confirmed || !mounted) return;
+
+    await _service.deleteComment(
+      postId: widget.post.id,
+      commentId: comment.id,
+      commentUserId: comment.userId,
+    );
+  }
+
   Future<void> _handleDeletePost(PostModel post) async {
     final confirmed =
         await DeletePostDialog.show(context);
@@ -131,6 +143,7 @@ class _PostDetailsScaffoldState
         service: _service,
         onLikePressed: _handleToggleLike,
         onDeletePressed: _handleDeletePost,
+        onDeleteComment: _handleDeleteComment,
         onSendComment: _handleAddComment,
       ),
       bottomNavigationBar: HomeBottomNavBar(
@@ -148,6 +161,7 @@ class _PostDetailsBody extends StatelessWidget {
   final PostInteractionService service;
   final void Function(PostModel post) onLikePressed;
   final void Function(PostModel post) onDeletePressed;
+  final void Function(CommentModel comment) onDeleteComment;
   final ValueChanged<String> onSendComment;
 
   const _PostDetailsBody({
@@ -157,6 +171,7 @@ class _PostDetailsBody extends StatelessWidget {
     required this.service,
     required this.onLikePressed,
     required this.onDeletePressed,
+    required this.onDeleteComment,
     required this.onSendComment,
   });
 
@@ -176,6 +191,7 @@ class _PostDetailsBody extends StatelessWidget {
               service: service,
               onLikePressed: onLikePressed,
               onDeletePressed: onDeletePressed,
+              onDeleteComment: onDeleteComment,
             ),
           ),
         ),

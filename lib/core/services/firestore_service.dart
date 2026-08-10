@@ -146,6 +146,21 @@ class FirestoreService implements DatabaseService {
   }
 
   @override
+  Future<void> deleteSubCollectionDoc({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+    required String docId,
+  }) async {
+    await firestore
+        .collection(parentPath)
+        .doc(parentDocId)
+        .collection(subCollection)
+        .doc(docId)
+        .delete();
+  }
+
+  @override
   Stream<List<Map<String, dynamic>>> getDataStream({
     required String path,
     Map<String, dynamic>? query,
