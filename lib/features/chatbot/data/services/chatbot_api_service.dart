@@ -1,9 +1,37 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:connect_hub/core/services/database_service.dart';
+import 'package:connect_hub/core/utils/backend_endpoints.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatbotApiService {
-  String get _webhookUrl => dotenv.env['CHATBOT_WEBHOOK_URL']!;
+  final DatabaseService? _databaseService;
+
+  ChatbotApiService({this._databaseService});
+
+  Future<String> _getWebhookUrl() async {
+    if (_databaseService != null) {
+      try {
+        final data = await _databaseService.getData(
+          path: BackendEndpoints.chatbotConfig,
+          docId: 'chatbot',
+        );
+
+        if (data is Map<String, dynamic>) {
+          final url = data['webhook_url'] as String?;
+          if (url != null && url.isNotEmpty) {
+            return url;
+          }
+        }
+      } catch (_) {}
+    }
+
+    final fallbackUrl = dotenv.env['CHATBOT_WEBHOOK_URL'];
+    if (fallbackUrl == null || fallbackUrl.isEmpty) {
+      throw Exception('Webhook URL is not configured in Firestore or .env');
+    }
+    return fallbackUrl;
+  }
 
   Future<String> sendMessage({
     required String sessionId,
@@ -12,7 +40,8 @@ class ChatbotApiService {
     final client = HttpClient();
 
     try {
-      final uri = Uri.parse(_webhookUrl);
+      final webhookUrl = await _getWebhookUrl();
+      final uri = Uri.parse(webhookUrl);
       final request = await client.postUrl(uri);
 
       request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
@@ -26,8 +55,7 @@ class ChatbotApiService {
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw Exception(
-          'Chatbot request failed with status '
-          '${response.statusCode}',
+          'Chatbot request failed with status ${response.statusCode}',
         );
       }
 

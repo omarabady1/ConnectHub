@@ -35,7 +35,9 @@ void setupServiceLocator() {
     ),
   );
   getIt.registerSingleton<ChatService>(ChatService());
-  getIt.registerSingleton<ChatbotApiService>(ChatbotApiService());
+  getIt.registerSingleton<ChatbotApiService>(
+    ChatbotApiService(databaseService: getIt<DatabaseService>()),
+  );
   getIt.registerSingleton<ChatStorageService>(ChatStorageService());
   getIt.registerLazySingleton<ChatbotRepo>(
     () => ChatbotRepoImpl(
