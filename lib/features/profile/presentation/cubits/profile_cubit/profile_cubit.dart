@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:connect_hub/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:connect_hub/features/profile/domain/repos/profile_repo.dart';
 

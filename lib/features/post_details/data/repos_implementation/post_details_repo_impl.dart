@@ -1,6 +1,6 @@
 import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:connect_hub/features/post_details/data/models/comment_model.dart';
 import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
 import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';

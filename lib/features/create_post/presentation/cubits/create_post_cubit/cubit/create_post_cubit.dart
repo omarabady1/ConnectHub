@@ -5,7 +5,7 @@ import 'package:connect_hub/core/services/database_service.dart';
 import 'package:connect_hub/core/utils/backend_endpoints.dart';
 import 'package:connect_hub/features/authentication/domain/entities/user_entity.dart';
 import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -1,38 +1,23 @@
+import 'package:connect_hub/features/home/domain/entities/post_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class PostModel {
-  final String id;
-  final String userId;
-  final String authorName;
-  final String authorRole;
-  final String timeAgo;
-  final String? avatarUrl;
-  final String? avatarInitial;
-  final bool isCurrentUser;
-  final String postTitle;
-  final String postContent;
-  final String? mainImageUrl;
-  final int likesCount;
-  final int commentsCount;
-  final bool isLiked;
-  final List<String> likedBy;
-
+class PostModel extends PostEntity {
   const PostModel({
-    required this.id,
-    this.userId = '',
-    required this.authorName,
-    required this.authorRole,
-    required this.timeAgo,
-    this.avatarUrl,
-    this.avatarInitial,
-    this.isCurrentUser = false,
-    required this.postTitle,
-    required this.postContent,
-    this.mainImageUrl,
-    required this.likesCount,
-    required this.commentsCount,
-    this.isLiked = false,
-    this.likedBy = const [],
+    required super.id,
+    super.userId = '',
+    required super.authorName,
+    required super.authorRole,
+    required super.timeAgo,
+    super.avatarUrl,
+    super.avatarInitial,
+    super.isCurrentUser = false,
+    required super.postTitle,
+    required super.postContent,
+    super.mainImageUrl,
+    required super.likesCount,
+    required super.commentsCount,
+    super.isLiked = false,
+    super.likedBy = const [],
   });
 
   PostModel copyWith({
@@ -127,7 +112,6 @@ class PostModel {
     if (value is String) return int.tryParse(value) ?? 0;
     return 0;
   }
-
 
   static String _timeAgoFrom(String createdAt) {
     final createdDate = DateTime.tryParse(createdAt);

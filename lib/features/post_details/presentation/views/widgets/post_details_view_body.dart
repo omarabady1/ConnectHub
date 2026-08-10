@@ -4,7 +4,7 @@ import '../../../../../constants.dart';
 import 'comments_section.dart';
 import 'liked_by_section.dart';
 import 'post_detail_card.dart';
-import '../../../../home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 
 class PostDetailsViewBody extends StatelessWidget {
   final PostModel post;

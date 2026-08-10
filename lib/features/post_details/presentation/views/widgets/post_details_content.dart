@@ -1,4 +1,4 @@
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
 import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_cubit.dart';
 import 'package:connect_hub/features/post_details/presentation/cubits/post_details_cubit/post_details_state.dart';

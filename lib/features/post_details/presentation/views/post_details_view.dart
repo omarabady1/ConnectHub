@@ -6,7 +6,7 @@ import 'package:connect_hub/features/post_details/presentation/cubits/post_detai
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants.dart';
-import '../../../home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import '../../../home/presentation/views/home_view.dart';
 import '../../../home/presentation/views/widgets/home_bottom_nav_bar.dart';
 import 'widgets/comment_input_bottom_bar.dart';

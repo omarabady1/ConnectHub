@@ -1,4 +1,4 @@
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:connect_hub/features/profile/domain/entities/user_profile_entity.dart';
 
 abstract class ProfileRepo {

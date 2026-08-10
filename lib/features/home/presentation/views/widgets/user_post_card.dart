@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../constants.dart';
 import '../../../../../utils/app_text_styles.dart';
 import '../../../../../utils/snack_bar_utils.dart';
-import '../../../domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'post_card_actions.dart';
 import 'post_card_header.dart';
 import 'post_image.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:connect_hub/features/home/domain/models/post_model.dart';
+import 'package:connect_hub/features/home/data/models/post_model.dart';
 import 'package:connect_hub/features/post_details/domain/entities/comment_entity.dart';
 import 'package:connect_hub/features/post_details/domain/repos/post_details_repo.dart';
 import 'post_details_state.dart';
