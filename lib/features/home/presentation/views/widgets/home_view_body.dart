@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
+import 'package:connect_hub/core/services/database_service.dart';
+import 'package:connect_hub/core/utils/backend_endpoints.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../constants.dart';
 
-import '../../cubits/home_cubit.dart';
+import '../../../domain/models/post_model.dart';
 import 'regular_post_card.dart';
 import 'user_post_card.dart';
 
@@ -11,67 +14,80 @@ class HomeViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await context.read<HomeCubit>().loadPosts();
-      },
-      child: Container(
-        color: kHomeBackgroundColor,
-        child: BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is HomeError) {
-              return Center(child: Text(state.errMessage));
-            } else if (state is HomeLoaded) {
-              final posts = state.posts;
+    final databaseService = getIt<DatabaseService>();
+    final postsStream = databaseService.getDataStream(
+      path: BackendEndpoints.posts,
+      query: const {'orderBy': 'createdAt', 'descending': true},
+    );
 
-              if (posts.isEmpty) {
-                return const Center(child: Text('No posts yet.'));
-              }
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: postsStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        }
 
-              return ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 16,
-                  bottom: 100,
-                ),
-                itemCount: posts.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-                  if (post.isCurrentUser) {
-                    return UserPostCard(
-                      post: post,
-                      onPostUpdated: (updatedPost) {
-                        context.read<HomeCubit>().updatePost(updatedPost);
-                      },
-                      onPostRemoved: (postId) {
-                        context.read<HomeCubit>().removePost(postId);
-                      },
-                      onPostDeleted: (post) {
-                        return context.read<HomeCubit>().deletePost(post);
-                      },
-                    );
-                  } else {
-                    return RegularPostCard(
-                      post: post,
-                      onPostUpdated: (updatedPost) {
-                        context.read<HomeCubit>().updatePost(updatedPost);
-                      },
-                    );
-                  }
-                },
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final posts = (snapshot.data ?? [])
+            .map(PostModel.fromMap)
+            .toList();
+
+        if (posts.isEmpty) {
+          return const Center(child: Text('No posts yet.'));
+        }
+
+        return ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 100,
+          ),
+          itemCount: posts.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 16),
+          itemBuilder: (context, index) {
+            final post = posts[index];
+            if (post.isCurrentUser) {
+              return UserPostCard(
+                post: post,
+                onPostDeleted: (post) => _deletePost(post),
               );
             }
-
-            return const SizedBox();
+            return RegularPostCard(post: post);
           },
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  Future<void> _deletePost(PostModel post) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId == null ||
+        post.userId.isEmpty ||
+        post.userId != currentUserId) {
+      throw StateError('You can only delete posts you created.');
+    }
+
+    final firestore = FirebaseFirestore.instance;
+    final commentsSnapshot = await firestore
+        .collection(BackendEndpoints.posts)
+        .doc(post.id)
+        .collection(BackendEndpoints.comments)
+        .get();
+
+    final batch = firestore.batch();
+    for (final doc in commentsSnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    batch.delete(
+      firestore
+          .collection(BackendEndpoints.posts)
+          .doc(post.id),
+    );
+    await batch.commit();
   }
 }

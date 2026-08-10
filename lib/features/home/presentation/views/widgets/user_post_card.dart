@@ -11,15 +11,11 @@ import 'post_image.dart';
 
 class UserPostCard extends StatelessWidget {
   final PostModel post;
-  final ValueChanged<PostModel>? onPostUpdated;
-  final ValueChanged<String>? onPostRemoved;
   final Future<void> Function(PostModel post)? onPostDeleted;
 
   const UserPostCard({
     super.key,
     required this.post,
-    this.onPostUpdated,
-    this.onPostRemoved,
     this.onPostDeleted,
   });
 
@@ -33,18 +29,11 @@ class UserPostCard extends StatelessWidget {
         onPostDeleted != null;
 
     return GestureDetector(
-      onTap: () async {
-        final updatedPost = await Navigator.of(
-          context,
-        ).pushNamed(PostDetailsView.routeName, arguments: post);
-        if (updatedPost is PostModel && onPostUpdated != null) {
-          onPostUpdated!(updatedPost);
-        } else if (updatedPost is PostDetailsDeletedResult) {
-          onPostRemoved?.call(updatedPost.postId);
-          if (!context.mounted) return;
-
-          showCustomSnackBar(context, 'Post deleted.', isError: false);
-        }
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          PostDetailsView.routeName,
+          arguments: post,
+        );
       },
       child: Container(
         width: double.infinity,

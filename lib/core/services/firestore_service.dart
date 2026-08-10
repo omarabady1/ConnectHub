@@ -144,4 +144,26 @@ class FirestoreService implements DatabaseService {
       await batch.commit();
     }
   }
+
+  @override
+  Stream<List<Map<String, dynamic>>> getDataStream({
+    required String path,
+    Map<String, dynamic>? query,
+  }) {
+    Query<Map<String, dynamic>> ref = firestore.collection(path);
+    if (query != null) {
+      if (query['orderBy'] != null) {
+        ref = ref.orderBy(
+          query['orderBy'],
+          descending: query['descending'] ?? false,
+        );
+      }
+      if (query['limit'] != null) {
+        ref = ref.limit(query['limit']);
+      }
+    }
+    return ref.snapshots().map(
+      (snapshot) => snapshot.docs.map((doc) => doc.data()).toList(),
+    );
+  }
 }

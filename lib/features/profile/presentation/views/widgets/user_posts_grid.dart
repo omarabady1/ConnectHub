@@ -37,7 +37,6 @@ class UserPostsGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         return UserPostCard(
           post: posts[index],
-          onPostRemoved: onPostRemoved,
           onPostDeleted: onPostDeleted,
         );
       },

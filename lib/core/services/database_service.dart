@@ -45,4 +45,9 @@ abstract class DatabaseService {
     required String parentDocId,
     required String subCollection,
   });
+
+  Stream<List<Map<String, dynamic>>> getDataStream({
+    required String path,
+    Map<String, dynamic>? query,
+  });
 }

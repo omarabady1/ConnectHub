@@ -9,21 +9,17 @@ import 'post_image.dart';
 
 class RegularPostCard extends StatelessWidget {
   final PostModel post;
-  final ValueChanged<PostModel>? onPostUpdated;
 
-  const RegularPostCard({super.key, required this.post, this.onPostUpdated});
+  const RegularPostCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        final updatedPost = await Navigator.of(context).pushNamed(
+      onTap: () {
+        Navigator.of(context).pushNamed(
           PostDetailsView.routeName,
           arguments: post,
         );
-        if (updatedPost is PostModel && onPostUpdated != null) {
-          onPostUpdated!(updatedPost);
-        }
       },
       child: Container(
         width: double.infinity,
