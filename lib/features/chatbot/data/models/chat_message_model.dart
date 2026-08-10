@@ -1,23 +1,14 @@
-/// Represents who sent a chat message.
-enum ChatMessageSender { user, ai }
+import 'package:connect_hub/features/chatbot/domain/entities/chat_message_entity.dart';
 
-/// A single message in the chatbot conversation.
-class ChatMessageModel {
-  final String id;
-  final ChatMessageSender sender;
-  final String text;
-  final DateTime timestamp;
-  final bool isLoading;
-
+class ChatMessageModel extends ChatMessageEntity {
   const ChatMessageModel({
-    required this.id,
-    required this.sender,
-    required this.text,
-    required this.timestamp,
-    this.isLoading = false,
+    required super.id,
+    required super.sender,
+    required super.text,
+    required super.timestamp,
+    super.isLoading = false,
   });
 
-  /// Deserializes a [ChatMessageModel] from a JSON map.
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
       id: json['id'] as String,
@@ -29,7 +20,6 @@ class ChatMessageModel {
     );
   }
 
-  /// Serializes this message to a JSON-compatible map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -37,5 +27,15 @@ class ChatMessageModel {
       'text': text,
       'timestamp': timestamp.toIso8601String(),
     };
+  }
+
+  factory ChatMessageModel.fromEntity(ChatMessageEntity entity) {
+    return ChatMessageModel(
+      id: entity.id,
+      sender: entity.sender,
+      text: entity.text,
+      timestamp: entity.timestamp,
+      isLoading: entity.isLoading,
+    );
   }
 }

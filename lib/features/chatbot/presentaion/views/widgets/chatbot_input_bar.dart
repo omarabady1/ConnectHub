@@ -1,6 +1,6 @@
+import 'package:connect_hub/constants.dart';
+import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
-import '../../../../../constants.dart';
-import '../../../../../utils/app_text_styles.dart';
 
 class ChatbotInputBar extends StatefulWidget {
   final ValueChanged<String> onSubmitted;

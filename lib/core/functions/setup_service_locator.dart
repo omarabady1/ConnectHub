@@ -4,9 +4,11 @@ import 'package:connect_hub/core/services/firebase_auth_service.dart';
 import 'package:connect_hub/core/services/firestore_service.dart';
 import 'package:connect_hub/core/services/imagebb_api_service.dart';
 import 'package:connect_hub/features/authentication/data/repos/auth_repo_implementation.dart';
+import 'package:connect_hub/features/chatbot/data/repos_implementation/chatbot_repo_impl.dart';
 import 'package:connect_hub/features/chatbot/data/services/chat_service.dart';
 import 'package:connect_hub/features/chatbot/data/services/chat_storage_service.dart';
 import 'package:connect_hub/features/chatbot/data/services/chatbot_api_service.dart';
+import 'package:connect_hub/features/chatbot/domain/repos/chatbot_repo.dart';
 import 'package:connect_hub/features/post_details/data/repos_implementation/post_details_repo_impl.dart';
 import 'package:connect_hub/features/post_details/data/services/post_interaction_service.dart';
 import 'package:connect_hub/features/post_details/domain/repos/post_details_repo.dart';
@@ -35,10 +37,15 @@ void setupServiceLocator() {
   getIt.registerSingleton<ChatService>(ChatService());
   getIt.registerSingleton<ChatbotApiService>(ChatbotApiService());
   getIt.registerSingleton<ChatStorageService>(ChatStorageService());
-  getIt.registerLazySingleton<PostInteractionService>(
-    () => PostInteractionService(
-      databaseService: getIt<DatabaseService>(),
+  getIt.registerLazySingleton<ChatbotRepo>(
+    () => ChatbotRepoImpl(
+      apiService: getIt<ChatbotApiService>(),
+      storageService: getIt<ChatStorageService>(),
+      chatService: getIt<ChatService>(),
     ),
+  );
+  getIt.registerLazySingleton<PostInteractionService>(
+    () => PostInteractionService(databaseService: getIt<DatabaseService>()),
   );
   getIt.registerLazySingleton<PostDetailsRepo>(
     () => PostDetailsRepoImpl(
@@ -67,6 +74,3 @@ void setupServiceLocator() {
     ),
   );
 }
-
-
-

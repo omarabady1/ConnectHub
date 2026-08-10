@@ -81,25 +81,39 @@ class _TypingDotsAnimationState extends State<TypingDotsAnimation>
         final start = index * 0.2;
         final end = (start + 0.5).clamp(0.0, 1.0);
 
-        final translationAnimation = TweenSequence<double>([
-          TweenSequenceItem(tween: Tween(begin: 0.0, end: -4.0), weight: 50),
-          TweenSequenceItem(tween: Tween(begin: -4.0, end: 0.0), weight: 50),
-        ]).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: Interval(start, end, curve: Curves.easeInOut),
-          ),
-        );
+        final translationAnimation =
+            TweenSequence<double>([
+              TweenSequenceItem(
+                tween: Tween(begin: 0.0, end: -4.0),
+                weight: 50,
+              ),
+              TweenSequenceItem(
+                tween: Tween(begin: -4.0, end: 0.0),
+                weight: 50,
+              ),
+            ]).animate(
+              CurvedAnimation(
+                parent: _controller,
+                curve: Interval(start, end, curve: Curves.easeInOut),
+              ),
+            );
 
-        final opacityAnimation = TweenSequence<double>([
-          TweenSequenceItem(tween: Tween(begin: 0.35, end: 1.0), weight: 50),
-          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.35), weight: 50),
-        ]).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: Interval(start, end, curve: Curves.easeInOut),
-          ),
-        );
+        final opacityAnimation =
+            TweenSequence<double>([
+              TweenSequenceItem(
+                tween: Tween(begin: 0.35, end: 1.0),
+                weight: 50,
+              ),
+              TweenSequenceItem(
+                tween: Tween(begin: 1.0, end: 0.35),
+                weight: 50,
+              ),
+            ]).animate(
+              CurvedAnimation(
+                parent: _controller,
+                curve: Interval(start, end, curve: Curves.easeInOut),
+              ),
+            );
 
         return AnimatedBuilder(
           animation: _controller,

@@ -1,10 +1,10 @@
 import 'package:connect_hub/constants.dart';
-import 'package:connect_hub/features/chatbot/domain/models/chat_message_model.dart';
+import 'package:connect_hub/features/chatbot/domain/entities/chat_message_entity.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class BuildUserBubble extends StatelessWidget {
-  final ChatMessageModel message;
+  final ChatMessageEntity message;
 
   const BuildUserBubble({super.key, required this.message});
 

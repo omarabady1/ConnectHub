@@ -1,11 +1,11 @@
-import 'package:connect_hub/features/chatbot/domain/models/chat_message_model.dart';
+import 'package:connect_hub/features/chatbot/domain/entities/chat_message_entity.dart';
 import 'package:flutter/material.dart';
 import 'build_ai_bubble.dart';
 import 'build_loading_bubble.dart';
 import 'build_user_bubble.dart';
 
 class ChatMessageBubble extends StatelessWidget {
-  final ChatMessageModel message;
+  final ChatMessageEntity message;
 
   const ChatMessageBubble({super.key, required this.message});
 

@@ -1,29 +1,33 @@
+import 'package:connect_hub/constants.dart';
+import 'package:connect_hub/core/functions/setup_service_locator.dart';
+import 'package:connect_hub/features/chatbot/domain/repos/chatbot_repo.dart';
+import 'package:connect_hub/features/chatbot/presentaion/cubits/chatbot_cubit/chatbot_cubit.dart';
 import 'package:flutter/material.dart';
-import '../../../../constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/chatbot_top_app_bar.dart';
 import 'widgets/chatbot_view_body.dart';
 
-class ChatbotView extends StatefulWidget {
+class ChatbotView extends StatelessWidget {
   const ChatbotView({super.key});
 
   static const String routeName = '/chatbot';
 
   @override
-  State<ChatbotView> createState() => _ChatbotViewState();
-}
-
-class _ChatbotViewState extends State<ChatbotView> {
-  final GlobalKey<ChatbotViewBodyState> _bodyKey =
-      GlobalKey<ChatbotViewBodyState>();
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kHomeBackgroundColor,
-      appBar: ChatbotTopAppBar(
-        onClearChat: () => _bodyKey.currentState?.clearChat(),
+    return BlocProvider(
+      create: (context) =>
+          ChatbotCubit(getIt<ChatbotRepo>())..loadChatHistory(),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: kHomeBackgroundColor,
+            appBar: ChatbotTopAppBar(
+              onClearChat: () => context.read<ChatbotCubit>().clearChat(),
+            ),
+            body: const ChatbotViewBody(),
+          );
+        },
       ),
-      body: ChatbotViewBody(key: _bodyKey),
     );
   }
 }
