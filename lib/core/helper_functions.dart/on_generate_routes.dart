@@ -22,6 +22,15 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => HomeView(key: homeViewKey),
       );
     case CreatePostView.routeName:
+      final args = settings.arguments;
+      if (args is CreatePostViewArgs) {
+        return MaterialPageRoute(
+          builder: (context) => CreatePostView(
+            initialTitle: args.title,
+            initialContent: args.content,
+          ),
+        );
+      }
       return MaterialPageRoute(builder: (context) => const CreatePostView());
     case PostDetailsView.routeName:
       final post = settings.arguments as PostModel;

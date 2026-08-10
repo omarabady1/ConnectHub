@@ -6,8 +6,13 @@ import 'build_user_bubble.dart';
 
 class ChatMessageBubble extends StatelessWidget {
   final ChatMessageEntity message;
+  final String? userPrompt;
 
-  const ChatMessageBubble({super.key, required this.message});
+  const ChatMessageBubble({
+    super.key,
+    required this.message,
+    this.userPrompt,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,10 @@ class ChatMessageBubble extends StatelessWidget {
     } else if (message.sender == ChatMessageSender.user) {
       content = BuildUserBubble(message: message);
     } else {
-      content = BuildAiBubble(message: message);
+      content = BuildAiBubble(
+        message: message,
+        userPrompt: userPrompt,
+      );
     }
 
     return TweenAnimationBuilder<double>(

@@ -7,8 +7,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/create_post_top_app_bar.dart';
 import 'widgets/create_post_view_body.dart';
 
+class CreatePostViewArgs {
+  final String? title;
+  final String? content;
+
+  const CreatePostViewArgs({this.title, this.content});
+}
+
 class CreatePostView extends StatefulWidget {
-  const CreatePostView({super.key});
+  final String? initialTitle;
+  final String? initialContent;
+
+  const CreatePostView({
+    super.key,
+    this.initialTitle,
+    this.initialContent,
+  });
 
   static const String routeName = '/create-post';
 
@@ -23,8 +37,9 @@ class _CreatePostViewState extends State<CreatePostView> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
-    _descriptionController = TextEditingController();
+    _titleController = TextEditingController(text: widget.initialTitle ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.initialContent ?? '');
   }
 
   @override
