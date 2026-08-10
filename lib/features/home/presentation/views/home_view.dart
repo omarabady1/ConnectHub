@@ -1,8 +1,8 @@
 import 'package:connect_hub/core/functions/setup_service_locator.dart';
 import 'package:connect_hub/features/chatbot/domain/repos/chatbot_repo.dart';
-import 'package:connect_hub/features/chatbot/presentaion/cubits/chatbot_cubit/chatbot_cubit.dart';
-import 'package:connect_hub/features/chatbot/presentaion/views/widgets/chatbot_top_app_bar.dart';
-import 'package:connect_hub/features/chatbot/presentaion/views/widgets/chatbot_view_body.dart';
+import 'package:connect_hub/features/chatbot/presentation/cubits/chatbot_cubit/chatbot_cubit.dart';
+import 'package:connect_hub/features/chatbot/presentation/views/widgets/chatbot_top_app_bar.dart';
+import 'package:connect_hub/features/chatbot/presentation/views/widgets/chatbot_view_body.dart';
 import 'package:connect_hub/features/home/domain/repos/home_repo.dart';
 import 'package:connect_hub/features/home/presentation/cubits/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart';

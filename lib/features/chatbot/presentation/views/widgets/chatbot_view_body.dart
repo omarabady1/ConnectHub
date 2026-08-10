@@ -1,4 +1,4 @@
-import 'package:connect_hub/features/chatbot/presentaion/cubits/chatbot_cubit/chatbot_cubit.dart';
+import 'package:connect_hub/features/chatbot/presentation/cubits/chatbot_cubit/chatbot_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'chat_message_bubble.dart';
