@@ -12,6 +12,7 @@ class PostDetailsContent extends StatelessWidget {
   final PostInteractionService service;
   final void Function(PostModel post) onLikePressed;
   final void Function(PostModel post)? onDeletePressed;
+  final void Function(CommentModel comment)? onDeleteComment;
 
   const PostDetailsContent({
     super.key,
@@ -21,6 +22,7 @@ class PostDetailsContent extends StatelessWidget {
     required this.service,
     required this.onLikePressed,
     this.onDeletePressed,
+    this.onDeleteComment,
   });
 
   @override
@@ -71,6 +73,7 @@ class PostDetailsContent extends StatelessWidget {
               onDeletePressed: post.isCurrentUser
                   ? () => onDeletePressed?.call(post)
                   : null,
+              onDeleteComment: onDeleteComment,
             );
           },
         );

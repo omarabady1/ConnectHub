@@ -46,6 +46,13 @@ abstract class DatabaseService {
     required String subCollection,
   });
 
+  Future<void> deleteSubCollectionDoc({
+    required String parentPath,
+    required String parentDocId,
+    required String subCollection,
+    required String docId,
+  });
+
   Stream<List<Map<String, dynamic>>> getDataStream({
     required String path,
     Map<String, dynamic>? query,

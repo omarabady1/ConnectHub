@@ -1,12 +1,24 @@
 import 'package:connect_hub/features/post_details/domain/models/comment_model.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/utils/user_avatar.dart';
 
 class CommentItem extends StatelessWidget {
   final CommentModel comment;
+  final void Function(CommentModel comment)? onDeleteComment;
 
-  const CommentItem({super.key, required this.comment});
+  const CommentItem({
+    super.key,
+    required this.comment,
+    this.onDeleteComment,
+  });
+
+  bool get _isCommentOwner {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    return currentUserId != null &&
+        currentUserId == comment.userId;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +54,30 @@ class CommentItem extends StatelessWidget {
                   children: [
                     Text(
                       comment.authorName,
-                      style: AppTextStyles.semiBold12.copyWith(
+                      style:
+                          AppTextStyles.semiBold12.copyWith(
                         color: const Color(0xFF1B1B23),
                       ),
                     ),
-                    Text(
-                      comment.timeAgo,
-                      style: AppTextStyles.regular14.copyWith(
-                        color: const Color(0xFF9E9EA7),
-                        fontSize: 11,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          comment.timeAgo,
+                          style: AppTextStyles.regular14
+                              .copyWith(
+                            color: const Color(0xFF9E9EA7),
+                            fontSize: 11,
+                          ),
+                        ),
+                        if (_isCommentOwner) ...[
+                          const SizedBox(width: 4),
+                          _DeleteCommentButton(
+                            onTap: () => onDeleteComment
+                                ?.call(comment),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),
@@ -68,6 +94,27 @@ class CommentItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _DeleteCommentButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _DeleteCommentButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: const Padding(
+        padding: EdgeInsets.all(4),
+        child: Icon(
+          Icons.delete_outline,
+          size: 16,
+          color: Color(0xFF9E9EA7),
+        ),
+      ),
     );
   }
 }

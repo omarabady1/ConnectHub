@@ -7,12 +7,14 @@ class CommentsSection extends StatelessWidget {
   final int totalComments;
   final List<CommentModel> comments;
   final bool isLoading;
+  final void Function(CommentModel comment)? onDeleteComment;
 
   const CommentsSection({
     super.key,
     required this.totalComments,
     required this.comments,
     this.isLoading = false,
+    this.onDeleteComment,
   });
 
   @override
@@ -58,7 +60,10 @@ class CommentsSection extends StatelessWidget {
             separatorBuilder: (context, index) =>
                 const SizedBox(height: 16),
             itemBuilder: (context, index) {
-              return CommentItem(comment: comments[index]);
+              return CommentItem(
+                comment: comments[index],
+                onDeleteComment: onDeleteComment,
+              );
             },
           ),
       ],

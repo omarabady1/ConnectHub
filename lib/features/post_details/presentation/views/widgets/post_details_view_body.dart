@@ -13,6 +13,7 @@ class PostDetailsViewBody extends StatelessWidget {
   final List<Map<String, String>> likedByUsers;
   final VoidCallback? onLikePressed;
   final VoidCallback? onDeletePressed;
+  final void Function(CommentModel comment)? onDeleteComment;
 
   const PostDetailsViewBody({
     super.key,
@@ -22,6 +23,7 @@ class PostDetailsViewBody extends StatelessWidget {
     this.likedByUsers = const [],
     this.onLikePressed,
     this.onDeletePressed,
+    this.onDeleteComment,
   });
 
   @override
@@ -48,6 +50,7 @@ class PostDetailsViewBody extends StatelessWidget {
                   : comments.length,
               comments: comments,
               isLoading: isLoadingComments,
+              onDeleteComment: onDeleteComment,
             ),
             const SizedBox(height: 24),
           ],
