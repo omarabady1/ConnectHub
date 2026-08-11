@@ -174,4 +174,19 @@ class AuthRepoImplementation implements AuthRepo {
     }
     return UserModel.fromJson(userData);
   }
+
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
+    try {
+      await firebaseAuthService.sendPasswordResetEmail(emailAddress: email);
+      return right(null);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception in AuthRepoImplementation.sendPasswordResetEmail: $e');
+      return left(
+        ServerFailure('Unexpected Error Happened, Please Try Again Later'),
+      );
+    }
+  }
 }

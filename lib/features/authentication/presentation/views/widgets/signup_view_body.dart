@@ -36,18 +36,12 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     final password = _passwordController.text;
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      showCustomSnackBar(
-        context,
-        'Please fill in all fields.',
-      );
+      showCustomSnackBar(context, 'Please fill in all fields.');
       return;
     }
 
     if (password.length < 8) {
-      showCustomSnackBar(
-        context,
-        'Password must be at least 8 characters.',
-      );
+      showCustomSnackBar(context, 'Password must be at least 8 characters.');
       return;
     }
 
@@ -63,10 +57,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     return BlocConsumer<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpFailure) {
-          showCustomSnackBar(
-            context,
-            state.errMessage,
-          );
+          showCustomSnackBar(context, state.errMessage);
         }
 
         if (state is SignUpSuccess) {
@@ -267,7 +258,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed(LoginView.routeName);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
