@@ -132,7 +132,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       controller: _passwordController,
                       hintText: '********',
                       icon: Icons.lock_outline,
-                      obscureText: true,
+                      isPasswordField: true,
                     ),
                     const SizedBox(height: 8),
                     Align(
