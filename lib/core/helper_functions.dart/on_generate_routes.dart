@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/authentication/presentation/views/forgot_password_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/login_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/signup_view.dart';
 import 'package:connect_hub/features/chatbot/presentation/views/chatbot_view.dart';
@@ -17,6 +18,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const LoginView());
     case SignupView.routeName:
       return MaterialPageRoute(builder: (context) => const SignupView());
+    case ForgotPasswordView.routeName:
+      return MaterialPageRoute(builder: (context) => const ForgotPasswordView());
     case HomeView.routeName:
       return MaterialPageRoute(
         builder: (context) => HomeView(key: homeViewKey),

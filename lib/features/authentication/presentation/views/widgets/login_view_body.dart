@@ -1,5 +1,6 @@
 import 'package:connect_hub/constants.dart';
 import 'package:connect_hub/features/authentication/presentation/cubits/login_cubit/cubit/login_cubit.dart';
+import 'package:connect_hub/features/authentication/presentation/views/forgot_password_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/signup_view.dart';
 import 'package:connect_hub/features/authentication/presentation/views/widgets/auth_text_field.dart';
 import 'package:connect_hub/features/authentication/presentation/views/widgets/social_button.dart';
@@ -139,7 +140,27 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       icon: Icons.lock_outline,
                       obscureText: true,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(ForgotPasswordView.routeName);
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(44, 22),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Forgot Password?',
+                          style: AppTextStyles.semiBold13.copyWith(
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     FilledButton(
                       onPressed: isLoading ? null : () => _submitLogin(context),
                       style: FilledButton.styleFrom(
