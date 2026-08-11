@@ -244,7 +244,8 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       icon: SvgPicture.asset(Assets.assetsIconsGoogleIcon),
                       backgroundColor: const Color(0xFFF8FAFC),
                       textColor: kTertiaryColor,
-                      onPressed: null,
+                      onPressed: () =>
+                          context.read<SignUpCubit>().signUpWithGoogle(),
                     ),
                     const SizedBox(height: 24),
                     Row(
