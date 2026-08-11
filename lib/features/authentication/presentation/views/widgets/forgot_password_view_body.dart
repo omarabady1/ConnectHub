@@ -1,6 +1,7 @@
 import 'package:connect_hub/constants.dart';
 import 'package:connect_hub/features/authentication/presentation/cubits/forgot_password_cubit/forgot_password_cubit.dart';
 import 'package:connect_hub/features/authentication/presentation/views/widgets/auth_text_field.dart';
+import 'package:connect_hub/features/authentication/presentation/views/widgets/show_confirm_dialog.dart';
 import 'package:connect_hub/generated/assets.dart';
 import 'package:connect_hub/utils/app_text_styles.dart';
 import 'package:connect_hub/utils/snack_bar_utils.dart';
@@ -42,10 +43,7 @@ class _ForgotPasswordViewBodyState extends State<ForgotPasswordViewBody> {
           showCustomSnackBar(context, state.errMessage);
         }
         if (state is ForgotPasswordSuccess) {
-          showCustomSnackBar(
-            context,
-            'Password reset link sent! Check your inbox.',
-          );
+          showConfirmDialog(context);
         }
       },
       builder: (context, state) {
