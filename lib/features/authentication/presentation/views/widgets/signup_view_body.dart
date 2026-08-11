@@ -21,12 +21,15 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -34,14 +37,23 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       showCustomSnackBar(context, 'Please fill in all fields.');
       return;
     }
 
     if (password.length < 8) {
       showCustomSnackBar(context, 'Password must be at least 8 characters.');
+      return;
+    }
+
+    if (password != confirmPassword) {
+      showCustomSnackBar(context, 'Passwords do not match.');
       return;
     }
 
@@ -71,6 +83,21 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
       },
       builder: (context, state) {
         final isLoading = state is SignUpLoading;
+        final passwordText = _passwordController.text;
+        final confirmPasswordText = _confirmPasswordController.text;
+        final isConfirmNotEmpty = confirmPasswordText.isNotEmpty;
+        final isPasswordMatch =
+            isConfirmNotEmpty && confirmPasswordText == passwordText;
+
+        Widget? confirmSuffixIcon;
+        if (isConfirmNotEmpty) {
+          confirmSuffixIcon = Icon(
+            isPasswordMatch ? Icons.check_circle : Icons.cancel,
+            color: isPasswordMatch
+                ? const Color(0xFF10B981)
+                : const Color(0xFFEF4444),
+          );
+        }
 
         return SafeArea(
           child: Center(
@@ -167,6 +194,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       hintText: '********',
                       icon: Icons.lock_outline,
                       obscureText: true,
+                      onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -175,6 +203,50 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         color: const Color(0xFF6B7280),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'CONFIRM PASSWORD',
+                      style: AppTextStyles.semiBold12.copyWith(
+                        letterSpacing: 0.8,
+                        color: const Color(0xFF4B5563),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    AuthTextField(
+                      controller: _confirmPasswordController,
+                      hintText: '********',
+                      icon: Icons.lock_outline,
+                      obscureText: true,
+                      suffixIcon: confirmSuffixIcon,
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    if (isConfirmNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Icon(
+                            isPasswordMatch
+                                ? Icons.check_circle_outline
+                                : Icons.error_outline,
+                            size: 14,
+                            color: isPasswordMatch
+                                ? const Color(0xFF10B981)
+                                : const Color(0xFFEF4444),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            isPasswordMatch
+                                ? 'Passwords match'
+                                : 'Passwords do not match',
+                            style: AppTextStyles.regular13.copyWith(
+                              color: isPasswordMatch
+                                  ? const Color(0xFF10B981)
+                                  : const Color(0xFFEF4444),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                     const SizedBox(height: 28),
                     FilledButton(
                       onPressed: isLoading
