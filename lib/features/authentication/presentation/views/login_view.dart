@@ -14,7 +14,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(authRepo:getIt<AuthRepo>()),
+      create: (context) => LoginCubit(authRepo: getIt<AuthRepo>()),
       child: Scaffold(backgroundColor: kSecondaryColor, body: LoginViewBody()),
     );
   }

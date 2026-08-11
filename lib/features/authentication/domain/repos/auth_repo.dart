@@ -18,4 +18,5 @@ abstract class AuthRepo {
   UserEntity? getCachedUser();
   Future<bool> checkIfUserExists(String value);
   Future<UserEntity> getUserData({required String userID});
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email);
 }

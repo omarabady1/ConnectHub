@@ -23,9 +23,7 @@ class AuthTextField extends StatelessWidget {
       controller: controller,
       keyboardType: inputType,
       obscureText: obscureText,
-      style: AppTextStyles.medium15.copyWith(
-        color: const Color(0xFF111827),
-      ),
+      style: AppTextStyles.medium15.copyWith(color: const Color(0xFF111827)),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyles.medium15.copyWith(

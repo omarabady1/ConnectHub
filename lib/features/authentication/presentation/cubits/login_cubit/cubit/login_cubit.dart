@@ -2,7 +2,6 @@ import 'package:connect_hub/features/authentication/domain/entities/user_entity.
 import 'package:connect_hub/features/authentication/domain/repos/auth_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {

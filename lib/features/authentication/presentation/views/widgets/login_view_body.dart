@@ -35,7 +35,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      showCustomSnackBar(context, 'Please enter email and password.',);
+      showCustomSnackBar(context, 'Please enter email and password.');
       return;
     }
 
@@ -47,10 +47,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          showCustomSnackBar(
-            context,
-            state.errMessage,
-          );
+          showCustomSnackBar(context, state.errMessage);
         }
         if (state is LoginSuccess) {
           Navigator.pushReplacementNamed(context, HomeView.routeName);
@@ -96,10 +93,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     ),
                     const SizedBox(height: 28),
                     Center(
-                      child: Text(
-                        'ConnectHub',
-                        style: AppTextStyles.bold28,
-                      ),
+                      child: Text('ConnectHub', style: AppTextStyles.bold28),
                     ),
                     const SizedBox(height: 8),
                     Center(
@@ -145,7 +139,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(ForgotPasswordView.routeName);
+                          Navigator.of(
+                            context,
+                          ).pushNamed(ForgotPasswordView.routeName);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
